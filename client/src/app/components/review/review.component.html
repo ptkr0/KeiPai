@@ -1,0 +1,28 @@
+<div class="card bg-[#353347] w-full h-auto max-h-[300px] my-2 flex flex-row items-start p-4">
+    <div class="ml-4 text-left flex flex-col h-full">
+        <div class="flex items-center my-2">
+            <div class="rating rating-md">
+                @for(star of stars; let idx = $index; track idx) {
+                    @if(star === "star") {
+                        <input type="radio" name="rating{{id}}" class="mask mask-star bg-orange-400 cursor-default" [checked]="this.stars"  disabled=""/>
+                    }
+                    @else if (star === "border") {
+                        <input type="radio" name="rating{{id}}" class="mask mask-star bg-orange-400 cursor-default" disabled=""/>
+                    }
+                }
+            </div>
+        </div>
+        <p class="text-[#ebe9ed] text-ellipsis line-clamp-2">{{ review?.comment || 'No comment provided.' }}</p>
+        <div class="text-sm mt-2 flex items-center">
+            <span>Posted: {{ review?.reviewDate | date }} by:</span>
+            <span class="ml-1">
+            @if(review?.isAnonymous){
+                <span class="font-bold text-ellipsis overflow-hidden whitespace-nowrap">Anonymous</span>
+            }
+            @else {
+                <a href="profile/{{ review?.reviewerName }}" class="font-bold text-ellipsis overflow-hidden whitespace-nowrap link link-accent">{{ review?.reviewerName }}</a>
+            }
+            </span>
+        </div>
+    </div>
+</div>

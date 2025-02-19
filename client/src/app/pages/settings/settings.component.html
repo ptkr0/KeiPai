@@ -1,0 +1,6 @@
+@if(this.userService.user()?.role === "Developer") {
+    <app-developer-settings [username]="this.userService.user()?.username"></app-developer-settings>
+}
+@else if(this.userService.user()?.role === "Influencer") {
+    <app-influencer-settings [username]="this.userService.user()?.username"></app-influencer-settings>
+}

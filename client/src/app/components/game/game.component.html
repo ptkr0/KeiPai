@@ -1,0 +1,27 @@
+<button class="card bg-[#353347] w-full h-[150px] my-2 flex flex-row items-center hover:bg-[#4c4a63]" (click)="redirector(this.game.id, '/game/')">
+  @if (game.coverPhoto !== "") {
+  <img
+    src="{{game.coverPhoto}}"
+    lazyload
+    class="rounded-lg w-[250px] h-[116px] ml-3" />
+  }
+  @if (game.coverPhoto === "") {
+    <div class="w-[250px] h-[116px] rounded-lg ml-3 text-center content-center bg-black">no game cover set</div>
+  }
+  <div class="ml-4 text-left">
+    <h1 class="text-3xl font-bold text-[#ebe9ed] w-[400px] text-ellipsis overflow-hidden whitespace-nowrap">{{game.name}}</h1>
+    <h2 class="text-xl">Release Date: <span class="text-[#ebe9ed]">{{game.releaseDate}}</span></h2>
+    <div class="overflow-hidden whitespace-pre-wrap w-[400px]">Tags: 
+    @for (tag of game.tags; track tag) {
+      <span class="badge text-[#ebe9ed] mr-1 items-center">{{tag.name}}</span>
+    }
+    </div>
+  </div>
+  <div class="ml-auto">
+    @if(game.developerId === this.userService.user()?.id) {
+    <button class="btn btn-outline btn-info mr-3 font-roboto font-medium" (click)="redirector(this.game.id, '/edit-game/'); $event.stopPropagation()">Edit</button>
+    <button class="btn btn-outline btn-success mr-3 font-roboto font-medium" (click)="redirector(this.game.id, '/manage-keys/'); $event.stopPropagation()">Manage Keys</button>
+    <button class="btn btn-outline btn-error mr-3 font-roboto font-medium" (click)="deleteGame(game.id); $event.stopPropagation()">Delete</button>
+    }
+  </div>
+</button>

@@ -1,0 +1,71 @@
+@if(visible) {
+    <div class="modal modal-open">
+      <div class="modal-box bg-[#23222f] text-[#ebe9ed]">
+        <h3 class="modal-top font-bold text-xl">Request Key</h3>
+        @if (this.codeDistribution) {
+          <h5 class="modal-top text-sm mb-2 text-[#ebe9ed]">Sending this request will immediately grant you key</h5>
+         }
+        @else {
+        <h5 class="modal-top text-sm mb-2 text-[#ebe9ed]">After completing this form developer will consider your request</h5>
+        }
+        <div class="modal-content">
+          <form [formGroup]="sendRequest" (ngSubmit)="onSubmit()">
+            <label div="form-control">
+              <div class="label">
+                <span class="label-text">Gaming Platform</span>
+              </div>
+              <select
+                id="platform"
+                formControlName="platform"
+                class="select bg-[#23222f] border-[#ebe9ed] w-full"
+              >
+                <option value="" disabled selected>Select platform</option>
+                @for(platform of platforms; track platform) {
+                <option value="{{ platform.id }}" [disabled]="!platform.canBeRequested">{{ platform.name }}</option>
+                }
+              </select></label
+            >
+            <div class="divider"></div>
+            <label class="form-control">
+              <div class="label">
+                <span class="label-text">Channel Commitment</span>
+              </div>
+              <div class="flex flex-col">
+              @if (media?.youtube) {
+                <label class="flex items-center space-x-2 mb-2">
+                  <input type="radio" id="media-youtube" name="media" formControlName="media" value="youtube" class="radio radio-error mr-2"/>
+                  Youtube
+                </label>
+              }
+              @if (media?.twitch) {
+                <label class="flex items-center space-x-2 mb-2">
+                  <input type="radio" id="media-twitch" name="media" formControlName="media" value="twitch" class="radio radio-secondary mr-2"/>
+                  Twitch
+                </label>
+              }
+              @if (media?.other) {
+                <label class="flex items-center space-x-2 mb-2">
+                  <input type="radio" id="media-other" name="media" formControlName="media" value="other" class="radio radio-primary mr-2"/>
+                  Other Media Outlet
+                </label>
+              }
+              </div>
+            </label>
+            <div class="divider"></div>
+            <div class="form-control">
+              <label class="label cursor-pointer pt-0">
+                <span class="label-text text-[#ebe9ed]">I accept embargo date and special instructions set by the developer</span>
+                <input type="checkbox" class="checkbox" formControlName="confirm" id="confirm" />
+              </label>
+            </div>
+            <div class="modal-action">
+              <button class="btn btn-primary" (click)="onCancel()" type="button">Cancel</button>
+              <button class="btn btn-success" [disabled]="this.sendRequest.invalid" type="submit">
+                Request Key
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    }

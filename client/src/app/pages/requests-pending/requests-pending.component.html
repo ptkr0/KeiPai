@@ -1,0 +1,10 @@
+<app-influencer-navigation></app-influencer-navigation>
+
+<div class="flex flex-col items-center justify-center my-4">
+    <div class="flex flex-col items-center">
+        @for(request of requests; track requests)
+        {
+            <app-request-pending [request]="request" (cancelRequestEvent)="cancelRequest($event)"></app-request-pending>
+        }
+    </div>
+</div>

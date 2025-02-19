@@ -1,0 +1,12 @@
+@if(visible){
+<div class="modal modal-open">
+  <div class="modal-box bg-[#23222f]">
+    <h3 class="font-bold text-lg">{{ title }}</h3>
+    <p class="py-4">{{ message }}</p>
+    <div class="modal-action">
+      <button class="btn" (click)="onCancel()">{{ btnCancelText }}</button>
+      <button class="btn btn-error" (click)="onConfirm()">{{ btnOkText }}</button>
+    </div>
+  </div>
+</div>
+}

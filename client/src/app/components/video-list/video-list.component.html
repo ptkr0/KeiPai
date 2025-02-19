@@ -1,0 +1,16 @@
+<div class="flex flex-col mx-auto align-middle justify-center my-2 max-w-6xl">
+    <div class="flex flex-col items-center">
+        @for(video of videos; track video)
+        {
+            <app-youtube-video-dialog class="w-full" [video]="video"></app-youtube-video-dialog>
+        }
+        @if((pagination?.totalPages ?? 0) > 1)
+        {
+            <div class="join align-bottom p-4">
+                <button (click)="prevPage()" class="join-item btn btn-info" [disabled]="(pagination?.currentPage ?? 0) <= 1">«</button>
+                <button class="join-item mx-2"> Page {{ pagination?.currentPage }} of {{ pagination?.totalPages }} </button>
+                <button (click)="nextPage()" class="join-item btn btn-info" [disabled]="(pagination?.currentPage ?? 0) >= (pagination?.totalPages ?? 0)">»</button>
+            </div>
+        }
+    </div>
+</div>

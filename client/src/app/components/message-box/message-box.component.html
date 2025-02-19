@@ -1,0 +1,43 @@
+<div class="flex flex-col h-full">
+    <div class="card bg-[#23222f] shadow-md text-left p-2">
+        <div class="flex flex-col items-center gap-2 font-roboto">
+            <ng-icon size="35px" name="bootstrapPersonCircle" class="text-[#ebe9ed] mt-2"></ng-icon>
+            <a class="font-semibold text-xl text-[#ebe9ed] hover:underline" [href]="'profile/' + userInfo?.username">
+                {{ userInfo?.username }}
+            </a>
+            <div class="text-sm text-[#ebe9ed]">{{ userInfo?.contactEmail}}​</div>
+            <div class="text-sm text-[#ebe9ed]">{{ userInfo?.about}}​</div>
+        </div>
+    </div>
+
+    <div #scrollableTableContainer class="overflow-y-auto m-2 rounded h-[470px] mb-auto">
+        @for (message of messages; track message) {
+            @if (message.senderId === userInfo?.userId) {
+                <div class="chat chat-start mb-2">
+                    <div class="chat-header">
+                        {{ userInfo?.username }}
+                        <time class="text-xs opacity-50">{{message.createdAt | date: 'shortTime' }}</time>
+                    </div>
+                    <div class="chat-bubble text-black bg-[#9fa8d0]">
+                        {{ message.content }}
+                    </div>
+                </div>
+            } @else {
+                <div class="chat chat-end mb-2">
+                    <div class="chat-header">
+                        {{ userService.user()?.username }}
+                        <time class="text-xs opacity-50">{{message.createdAt | date: 'shortTime' }}</time>
+                    </div>
+                    <div class="chat-bubble text-black bg-[#f3e9e1]">{{ message.content }}</div>
+                </div>
+            }
+        }
+    </div>
+
+    <form [formGroup]="messageForm" (ngSubmit)="sendMessage()" autocomplete="off">
+    <div class="flex items-center w-full bottom-3">
+            <input type="text" class="input flex-grow bg-[#23222f]" id="message" formControlName="message" placeholder="Type your message here...">
+            <button class="ml-2 btn btn-info" [disabled]="messageForm.invalid">Send</button>
+    </div>
+</form>
+</div>

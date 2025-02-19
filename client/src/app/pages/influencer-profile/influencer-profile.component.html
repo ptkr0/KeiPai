@@ -1,0 +1,155 @@
+<div class="flex w-full max-w-6xl relative mx-auto mt-4">
+  <div class="breadcrumbs text-sm py-2">
+      <ul class="flex">
+          <li><a href="campaigns">Home</a></li>
+          <li><a href="profile/{{ this.profile?.influencer?.username }}">{{ this.profile?.influencer?.username }}</a></li>
+      </ul>
+  </div>
+</div>
+
+<div class="card bg-[#353347] max-w-6xl w-full mx-auto">
+  <div class="card-body px-8">
+    <div class="flex justify-between items-start">
+      <div class="flex-grow">
+        <div class="text-3xl text-[#ebe9ed] mb-2">{{ this.profile?.influencer?.username }} <app-rating [rating]="this.profile?.rating" [size]="'rating-md'"></app-rating> {{ this.profile?.influencer?.language | country }} </div>
+        <div>Campaigns Joined: <span class="text-[#ebe9ed]">{{ this.profile?.requestsSent }}</span></div>
+        <div>Requests Completed: <span class="text-[#ebe9ed]">{{ this.profile?.requestsDone }}</span></div>
+        @if (this.profile?.influencer?.contactEmail !== "" && this.profile?.influencer?.contactEmail !== null)
+        {
+          <div>Contact e-mail:
+            <a href="mailto:{{ this.profile?.influencer?.contactEmail }}" class="link link-accent">{{ this.profile?.influencer?.contactEmail }}</a>
+          </div>
+        }
+        @if (this.profile?.media?.youtube)
+        {
+          <div class="divider p-0 m-0 w-1/3"></div>
+          <div class="flex items-center">
+            <ng-icon name="bootstrapYoutube" size="25px" class="mr-2 text-red-500"></ng-icon>
+            <a href="{{ this.profile?.media?.youtube?.url }}" target="_blank" class="link link-accent">{{ this.profile?.media?.youtube?.username }}</a>
+          </div>
+          <div>Subscribers: 
+            <span class="text-[#ebe9ed]">{{ this.profile?.media?.youtube?.subscriberCount}}</span>
+          </div>
+          <div>Average Views: 
+            <span class="text-[#ebe9ed]">{{ this.profile?.media?.youtube?.averageViewCount }}</span>
+          </div>
+          <div class="divider p-0 m-0 w-1/3"></div>
+        }
+        @if (this.profile?.media?.twitch)
+        {
+          <div class="flex items-center">
+            <ng-icon name="bootstrapTwitch" size="25px" class="mr-2 text-purple-500"></ng-icon>
+            <a href="{{ this.profile?.media?.twitch?.url }}" target="_blank" class="link link-accent">{{ this.profile?.media?.twitch?.username }}</a>
+          </div>
+          <div>Followers: 
+            <span class="text-[#ebe9ed]">{{ this.profile?.media?.twitch?.followerCount}}</span>
+          </div>
+          <div>Average Viewers: 
+            <span class="text-[#ebe9ed]">{{ this.profile?.media?.twitch?.averageViewers ?? 'Not Enough Data' }}</span>
+          </div>
+          <div class="divider p-0 m-0 w-1/3"></div>
+        }
+        @if (this.profile?.media?.otherMedia)
+        {
+          <div class="flex items-center">
+            <ng-icon name="bootstrapNewspaper" size="25px" class="mr-2 text-[#ebe9ed]"></ng-icon>
+            {{ this.profile?.media?.otherMedia?.role }} at:
+            <a href="{{ this.profile?.media?.otherMedia?.url }}" target="_blank" class="link link-accent ml-1"> {{ this.profile?.media?.otherMedia?.name }}</a>
+          </div>
+          @if (this.profile?.media?.otherMedia?.isVerified)
+          {
+            <div class="text-success">This {{ this.profile?.media?.otherMedia?.medium }} was verified by our staff</div>
+          }
+          @else 
+          {
+            <div class="text-warning">This {{ this.profile?.media?.otherMedia?.medium }} was not verified by our staff yet. We are not sure about media they upload.</div>
+          }
+          <div class="divider p-0 m-0 w-1/3"></div>
+        }
+        @if (this.profile?.influencer?.about !== "" && this.profile?.influencer?.about !== null)
+        {
+          <div>About:
+            <div class="text-[#ebe9ed]">{{ this.profile?.influencer?.about }}</div>
+          </div>
+        }
+      </div>
+      @if (this.profile?.influencer?.id !== this.userService.user()?.id)
+      {
+        <div class="flex flex-col space-y-2 flex-shrink-0 w-48">
+          <a class="flex flex-row btn btn-outline items-center text-md text-[#ebe9ed]" href="messages/{{this.profile?.influencer?.id}}">
+            <ng-icon name="bootstrapEnvelopeFill" class="mr-2"></ng-icon>Message influencer
+          </a>
+          <a class="flex flex-row btn btn-outline btn-error items-center text-md">
+            <ng-icon name="bootstrapExclamationCircle" class="mr-2"></ng-icon>Report influencer
+          </a>
+        </div>
+      }
+      @else if (this.profile?.influencer?.id === this.userService.user()?.id)
+      {
+        <div class="flex flex-col space-y-2 flex-shrink-0 w-48">
+          <a class="flex flex-row btn btn-outline items-center text-md text-[#ebe9ed]" href="settings">
+            <ng-icon name="bootstrapGearFill" class="mr-2"></ng-icon>Edit Profile
+          </a>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+
+<div class="card bg-[#353347] max-w-6xl w-full mx-auto mt-4">
+  <div class="card-body items-center">
+    <div>
+      <button class="btn mx-4 bg-red-500 text-black rounded-full shadow-md transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg hover:bg-red-600" [disabled]="this.profile?.media?.youtube === null" (click)="selectTab('youtube')">
+        <ng-icon name="bootstrapYoutube" size="30px" class="mr-2"></ng-icon>Youtube
+      </button>
+
+      <button class="btn mx-4 px-8 bg-purple-500 text-black rounded-full shadow-md transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg hover:bg-purple-600" [disabled]="this.profile?.media?.twitch === null" (click)="selectTab('twitch')">
+        <ng-icon name="bootstrapTwitch" size="30px" class="mr-2"></ng-icon>Twitch
+      </button>
+
+      <button class="btn mx-4 px-8 btn-info rounded-full shadow-md transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg" [disabled]="this.profile?.media?.otherMedia === null" (click)="selectTab('other')">
+        <ng-icon name="bootstrapNewspaper" size="30px" class="mr-2"></ng-icon>{{ this.profile?.media?.otherMedia?.medium }}
+      </button>
+
+      <button class="btn mx-4 px-8 bg-green-500 text-black rounded-full shadow-md transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg hover:bg-green-600"  (click)="selectTab('reviews')">
+        <ng-icon name="bootstrapChatSquareTextFill" size="30px" class="mr-2"></ng-icon>Reviews
+      </button>
+
+    </div>
+  </div>
+</div>
+
+@if (selectedTab === 'none') {
+  <div class="flex items-center justify-center h-max">
+    <div class="max-w-max">
+        <p class="flex justify-center m-5"><img src="/assets/KEIPAI_LIGHT.svg" alt="KeiPai" class="w-[400px]" /></p>
+        <p class="text-white text-center text-3xl mt-4 font-roboto">Medialess</p>
+        <p class="text-white text-center text-xl mt-4 font-roboto">This user hasn't connected any platform, yet...</p>
+    </div>
+</div>
+}
+
+@else if(selectedTab === 'youtube') {
+  <div class="mx-auto m-4 w-full">
+    <app-video-list [userId]="this.profile?.influencer?.id"></app-video-list>
+  </div>
+}
+
+@else if(selectedTab === 'twitch') {
+  <div class="mx-auto m-4 w-full">
+    <app-stream-list [userId]="this.profile?.influencer?.id"></app-stream-list>
+  </div>
+}
+
+@else if(selectedTab === 'other') {
+  <div class="mx-auto m-4 w-full">
+    <app-other-media-list [userId]="this.profile?.influencer?.id"></app-other-media-list>
+  </div>
+}
+
+@else if(selectedTab === 'reviews') {
+  <div class="mx-auto m-4 w-full">
+    <app-review-list [userId]="this.profile?.influencer?.id"></app-review-list>
+  </div>
+}

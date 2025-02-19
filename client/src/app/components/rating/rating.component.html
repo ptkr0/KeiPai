@@ -1,0 +1,30 @@
+<div class="tooltip" [attr.data-tip]="this.getAverageRating() ? this.getAverageRating() + '/5 based on ' + this.rating?.numberOfRatings + ' ratings' : 'No one reviewed this influencer' "> 
+        @if (this.rating?.totalRating === 0) {
+        <div class="rating cursor-default {{this.size}}">
+            <input type="radio" name="rating{{id}}" class="mask mask-star bg-orange-400 cursor-default rating-hidden size-0 hidden"  checked disabled=""/>
+            <input type="radio" name="rating{{id}}" class="mask mask-star bg-orange-400 cursor-default" disabled=""/>
+            <input type="radio" name="rating{{id}}" class="mask mask-star bg-orange-400 cursor-default" disabled=""/>
+            <input type="radio" name="rating{{id}}" class="mask mask-star bg-orange-400 cursor-default" disabled=""/>
+            <input type="radio" name="rating{{id}}" class="mask mask-star bg-orange-400 cursor-default" disabled=""/>
+            <input type="radio" name="rating{{id}}" class="mask mask-star bg-orange-400 cursor-default" disabled=""/>
+        </div>
+        }
+        @else {
+            <div class="rating cursor-default rating-half {{this.size}}">
+                @for (star of stars; let idx = $index; track idx) {
+                    @if(star === "star") {
+                        <input type="radio" name="rating{{id}}" class="mask mask-star bg-orange-400 mask-half-1 cursor-default" [checked]="this.stars"  disabled=""/>
+                        <input type="radio" name="rating{{id}}" class="mask mask-star bg-orange-400 mask-half-2 cursor-default" [checked]="this.stars"  disabled=""/>
+                    }
+                    @else if(star === "half") {
+                        <input type="radio" name="rating{{id}}" class="mask mask-star bg-orange-400 mask-half-1 cursor-default" [checked]="this.stars" disabled=""/>
+                        <input type="radio" name="rating{{id}}" class="mask mask-star bg-orange-400 mask-half-2 cursor-default"  disabled=""/>
+                    }
+                    @else if (star === "border"){
+                        <input type="radio" name="rating{{id}}" class="mask mask-star bg-orange-400 mask-half-1 cursor-default" disabled=""/>
+                        <input type="radio" name="rating{{id}}" class="mask mask-star bg-orange-400 mask-half-2 cursor-default" disabled=""/>
+                    }
+                }
+            </div>
+        }
+</div>

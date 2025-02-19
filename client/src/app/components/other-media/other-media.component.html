@@ -1,0 +1,20 @@
+<div class="card bg-[#353347] w-full h-auto max-h-[300px] my-2 flex flex-row items-start p-4">
+    @if (content.thumbnail !== "") {
+    <img
+      src="{{content.thumbnail}}"
+      lazyload
+      class="rounded-lg w-[250px] max-h-[150px] ml-3" />
+    }
+    <div class="ml-4 text-left flex flex-col h-full">
+        <a class="text-2xl font-bold w-[700px] text-ellipsis overflow-hidden whitespace-nowrap link link-accent" href="{{content.url}}" target="_blank">{{content.title}}</a>
+        <h2 class="text-md">Description:</h2>
+        <p class="text-[#ebe9ed] text-ellipsis line-clamp-2 max-w-[700px]">{{content.description}}</p>
+        @if (content.games.length > 0) {
+        <div class="overflow-hidden whitespace-pre-wrap w-[900px]">Games Mentioned: 
+            @for (game of content.games; track game) {
+              <a href="game/{{game.id}}" class="badge text-[#ebe9ed] mr-1 items-center">{{game.name}}</a>
+            }
+        </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,91 @@
+<div class="flex w-full max-w-7xl relative mx-auto mt-4">
+    <div class="breadcrumbs text-sm py-2">
+      <ul class="flex">
+        <li><a href="games">Games</a></li>
+        <li><a href="game/{{id}}">Game</a></li>
+        <li>Manage Keys</li>
+      </ul>
+    </div>
+  </div>
+
+<div class="flex flex-row items-stretch max-w-7xl w-full mx-auto mb-4">
+
+<div class="flex flex-col mr-4 w-1/4">
+    <div class="card bg-[#353347] mr-4 w-full max-w-xs">
+        <div class="card-body">
+            <h1 class="text-2xl font-bold text-[#ebe9ed]">Filter Keys</h1>
+            @for(platform of platforms; track platform) {
+            <div class="flex flex-row items-center">
+                <input type="checkbox" class="checkbox size-5" [(ngModel)]="platform.selected" />
+                <label class="text-[#ebe9ed] ml-2 text-sm">{{ platform.name }}</label>
+            </div>
+            }
+            <button class="btn btn-info mt-2" (click)="onFilterClick()">Filter</button>
+        </div>
+    </div>
+
+    <div class="card bg-[#353347] w-full max-w-xs mt-4">
+        <div class="card-body">
+            <button class="btn btn-info mt-2" (click)="onAddKeysClick()">Add Keys</button>
+            <button class="btn btn-error mt-2" (click)="onDeleteKeysClick()">Bulk Delete Keys</button>
+        </div>
+    </div>
+</div>
+    
+    <div class="flex flex-col card bg-[#353347] w-full">
+        <div class="card-body flex-1">
+        <div class="text-xs text-left">Total number of keys: {{this.pagination?.totalCount}}</div>
+            <table class="table table-xs items-center">
+            <div #scrollableTableContainer class="overflow-y-auto max-h-[580px]">
+            <thead>
+                <tr>
+                    <th class="w-24">No.</th>
+                    <th class="w-36">Key ID</th>
+                    <th class="w-24">Platform</th>
+                    <th class="w-44">Platform Name</th>
+                    <th class="w-96">Key Value</th>
+                    <th class="w-10"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @for(key of keys; track key; let idx = $index) {
+                <tr>
+                    <td class="w-24">{{idx + 1 + (((pagination?.currentPage ?? 1) - 1) * 100)}}</td>
+                    <td class="w-36">{{ key.id }}</td>
+                    <td class="w-24">{{ key.platformId }}</td>
+                    <td class="w-44">{{ key.platformName }}</td>
+                    <td class="w-96">{{ key.value }}</td>
+                <td class="w-10">
+                    <button class="btn btn-ghost btn-xs btn-error" (click)="deleteKeys([key.id])">Delete</button>
+                </td>
+                </tr>
+            }
+            </tbody>
+        </div>  
+        </table>
+        </div>
+        <div class="join align-bottom p-4">
+            <button (click)="prevPage()" class="join-item btn btn-info" [disabled]="(pagination?.currentPage ?? 0) <= 1">«</button>
+            <button class="join-item mx-2"> Page {{ pagination?.currentPage }} of {{ pagination?.totalPages }} </button>
+            <button (click)="nextPage()" class="join-item btn btn-info" [disabled]="(pagination?.currentPage ?? 0) >= (pagination?.totalPages ?? 0)">»</button>
+        </div>
+    </div>
+</div>
+
+@if(isAddKeysDialogVisible){
+<app-add-keys-dialog
+  [visible]="isAddKeysDialogVisible"
+  [gameId]="id"
+  (confirm)="onAddKeysDialogConfirm($event)"
+  (cancel)="onAddKeysDialogCancel()"
+></app-add-keys-dialog>
+}
+
+@if(isDeleteKeysBulkDialogVisible){
+<app-delete-keys-bulk
+  [visible]="isDeleteKeysBulkDialogVisible"
+  [gameId]="id"
+  (confirm)="onDeleteKeysBulkConfirm($event)"
+  (cancel)="onDeleteKeysBulkCancel()"
+></app-delete-keys-bulk>
+}

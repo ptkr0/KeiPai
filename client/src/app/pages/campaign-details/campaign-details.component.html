@@ -1,0 +1,201 @@
+<div class="flex w-full max-w-7xl relative mx-auto mt-4">
+    <div class="breadcrumbs text-sm py-2">
+        <ul class="flex">
+            <li><a href="campaigns">Campaigns</a></li>
+            <li><a href="campaign/{{campaignStats?.campaign?.id}}">{{campaignStats?.campaign?.game?.name}}</a></li>
+            <li>Stats</li>
+        </ul>
+    </div>
+</div>
+
+<div class="flex flex-col w-full">
+    <div class="card w-full max-w-7xl bg-[#353347] shadow-xl mx-auto mb-4 p-4">
+        <div class="flex flex-row items-center">
+            <div class="flex flex-col w-[250px] h-[116px]">
+                @if (campaignStats?.campaign?.game?.coverPhoto) {
+                <img src="{{ campaignStats?.campaign?.game?.coverPhoto }}" lazyload class="rounded-lg shadow-2xl w-[250px] h-[116px] ml-1" />
+                } @if (!campaignStats?.campaign?.game?.coverPhoto) {
+                <div class="w-[250px] h-[116px] rounded-lg shadow-2xl ml-1 text-center content-center bg-black">
+                    no game cover set
+                </div>
+                }
+            </div>
+            <div class="ml-4 text-left">
+                <h1 class="text-3xl font-bold text-[#ebe9ed] w-[600px] overflow-hidden whitespace-nowrap">
+                    {{ campaignStats?.campaign?.game?.name }}
+                </h1>
+                <h2>
+                    Release Date:
+                    <span class="text-[#ebe9ed]">{{ campaignStats?.campaign?.game?.releaseDate }}</span>
+                </h2>
+                <div>
+                    Tags: @for (tag of campaignStats?.campaign?.game?.tags; track tag) {
+                    <span class="badge text-[#ebe9ed] mr-1">{{ tag.name }}</span>
+                    }
+                </div>
+                @if(!hasEnded() && campaignStats?.campaign?.endDate) {
+                    <h2>
+                        This campaign will end on:
+                        <span class="text-[#ebe9ed]">{{ campaignStats?.campaign?.endDate | date }}</span>
+                    </h2>
+                }
+                @if(hasEnded()){
+                    <h2 class="text-red-500">This Campaign has ended</h2>
+                }
+            </div>
+            <div class="ml-auto">
+                <button class="btn btn-outline btn-info mr-3 font-roboto font-medium"  (click)="redirector(campaignStats!.campaign!.game!.id, '/edit-game/')">
+                    Edit Game
+                </button>
+                <button class="btn btn-outline btn-success mr-3 font-roboto font-medium"  (click)="redirector(campaignStats!.campaign!.game!.id, '/manage-keys/')">
+                    Manage Keys
+                </button>
+                @if(!hasEnded()) {
+                <button class="btn btn-outline btn-error mr-3 font-roboto font-medium">
+                    Close
+                </button>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="card w-full max-w-7xl bg-[#353347] shadow-xl mx-auto mb-4">
+        <div class="card-body">
+            <h2 class="card-title text-[#ebe9ed] text-3xl text-center">Redeemed Keys</h2>
+            @for (key of campaignStats?.keys; track key.id) {
+                <div class="card bg-[#23222f] shadow-md p-2 px-4 mb-2">
+                    <div class="flex items-center gap-2 text-[#ebe9ed]">
+                        <ng-icon size="20px" name="{{key.id | platformIcon}}" class="flex-shrink-0"></ng-icon>
+                        <div class="flex-grow">
+                            <span class="text-sm font-semibold">{{key.name}}</span>
+                            <div class="text-xs text-base-content mt-0.5">
+                                <span>Requests Accepted: {{key.acceptedRequests}} /@if(key.keysForCampaign === -1){ No Limit}@else{ {{key.keysForCampaign}} }</span> • 
+                                <span>Keys left in database: {{key.keysLeft}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="card w-full max-w-7xl bg-[#353347] shadow-xl mx-auto mb-4">
+        <div class="card-body">
+            <h2 class="card-title text-[#ebe9ed] text-3xl text-center">Accepted Requests</h2>
+            <h2 class="card-title text-[#ebe9ed] text-xl text-center">Filter requests by:</h2>
+            <div class="flex justify-between w-1/2">
+                <div class="form-control">
+                  <label class="label cursor-pointer">
+                    <span class="label-text">All Requests: </span>
+                    <input
+                      type="radio"
+                      name="requests"
+                      value="accepted-and-completed"
+                      class="ml-2 radio"
+                      [checked]="selectedTab === 'accepted-and-completed'"
+                      (change)="onFilterChange('accepted-and-completed')"
+                    />
+                  </label>
+                </div>
+                <div class="form-control">
+                  <label class="label cursor-pointer">
+                    <span class="label-text">Completed Requests: </span>
+                    <input
+                      type="radio"
+                      name="requests"
+                      value="completed"
+                      class="ml-2 radio"
+                      [checked]="selectedTab === 'completed'"
+                      (change)="onFilterChange('completed')"
+                    />
+                  </label>
+                </div>
+                <div class="form-control">
+                  <label class="label cursor-pointer">
+                    <span class="label-text">Incomplete Requests: </span>
+                    <input
+                      type="radio"
+                      name="requests"
+                      value="accepted"
+                      class="ml-2 radio"
+                      [checked]="selectedTab === 'accepted'"
+                      (change)="onFilterChange('accepted')"
+                    />
+                  </label>
+                </div>
+              </div>              
+
+            <div class="text-xs text-left">Total number of requests: {{ this.requests.length }}</div>
+            <table class="table table-xs items-center">
+                <div #scrollableTableContainer class="overflow-y-auto max-h-[580px]">
+                    <thead>
+                        <tr>
+                            <th class="w-16">Request ID</th>
+                            <th class="w-36">Influencer</th>
+                            <th class="w-20 text-center">Language</th>
+                            <th class="w-28 text-center">Rating</th>
+                            <th class="w-20 text-center">Platform</th>
+                            <th class="w-20 text-center">Media</th>
+                            <th class="w-24 text-center">Request Date</th>
+                            <th class="w-24 text-center">Accept Date</th>
+                            <th class="w-24 text-center">Content Status</th>
+                            <th class="text-center">Submitted Content</th>
+                            <th class="text-center">Rate Influencer</th>
+                            <th class="text-center">Report Influencer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for(request of requests; track request.id) {
+                        <tr class="hover">
+                            <td class="w-16">{{ request.id }}</td>
+                            <td class="w-36 cursor-pointer" (click)="redirector(request.influencerName, '/profile')">{{ request.influencerName }}</td>
+                            <td class="w-20 text-center">{{ request.language | country }}</td>
+                            <td class="w-28 text-center">
+                                <app-rating [rating]="request.influencerRating" [size]="'rating-xs'"></app-rating>
+                            </td>
+                            <td class="w-20 text-center">
+                                <ng-icon name="{{ request.platform | platformIcon }}"></ng-icon>
+                            </td>
+                            <td class="w-20 text-center">
+                                <ng-icon name="{{ request.media | mediaIcon }}"></ng-icon>
+                            </td>
+                            <td class="w-24 text-center">{{ request.requestDate | date }}</td>
+                            <td class="w-24 text-center">{{ request.considerationDate | date }}</td>
+                            <td class="w-24 text-center">{{ getStatus(request) }}</td>
+                            <td class="text-center">
+                                <button class="btn btn-outline btn-xs btn-info" [disabled]="!request.content"
+                                    (click)="openMediaView(request); $event.stopPropagation()">
+                                    Check Content
+                                </button>
+                            </td>
+                            <td class="text-center">
+                                @if(request.influencerRating.userWasRated) {
+                                <button class="btn btn-outline btn-xs btn-success w-full"
+                                    (click)="onAddReview(request.influencerId, true); $event.stopPropagation()">
+                                    Edit Review
+                                </button>
+                            } @else {
+                                <button class="btn btn-outline btn-xs btn-success w-full"
+                                    (click)="onAddReview(request.influencerId, false); $event.stopPropagation()">
+                                    Rate
+                                </button>
+                            }
+                            </td>
+                            <td class="text-center">
+                                <button class="btn btn-outline btn-xs btn-error w-full"
+                                    (click)=" $event.stopPropagation()">
+                                    Report
+                                </button>
+                            </td>    
+                        </tr>
+                        }
+                    </tbody>
+                </div>
+            </table>
+        </div>
+    </div>
+</div>
+
+@if(isAddRequestVisible) {
+    <app-add-review [visible]="isAddRequestVisible" [userWasRated]="wasUserRated" [userId]="selectedRequestUserId" (cancel)="cancelAddReview()" (confirm)="addReview($event)"></app-add-review>
+}

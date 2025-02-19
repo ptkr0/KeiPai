@@ -1,0 +1,20 @@
+<div class="flex bg-[#23222f] flex-col min-h-screen">
+@if (this.userService.user() !== undefined) {
+        <app-header></app-header>
+        <main class="flex-grow">
+            <router-outlet></router-outlet>
+            <app-confirmation-dialog></app-confirmation-dialog>
+            <app-other-media-dialog></app-other-media-dialog>
+            <app-youtube-video-dialog></app-youtube-video-dialog>
+            <app-twitch-stream-dialog></app-twitch-stream-dialog>
+        </main>
+        <app-footer></app-footer>
+}
+@else if (this.userService.user() === null) {
+    <app-header></app-header>
+    <main class="flex-grow">
+        <app-main-page></app-main-page>
+    </main>
+    <app-footer></app-footer>
+}
+</div>

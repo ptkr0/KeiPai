@@ -1,0 +1,20 @@
+<div class="bg-[#141216] shadow my-2">
+    <div class="flex flex-row justify-center items-center">
+        <div class="flex">
+            <div class="divider divider-horizontal before:bg-[#23222f] after:bg-[#23222f]"></div>
+            <button class="btn btn-wide m-3 text-[#ebe9ed] font-roboto font-medium" (click)="redirector('/campaigns')">Available</button>
+            <div class="divider divider-horizontal before:bg-[#23222f] after:bg-[#23222f]"></div>
+            <button class="btn btn-wide m-3 text-[#ebe9ed] font-roboto font-medium " (click)="redirector('/pending')">Pending</button>
+            <div class="divider divider-horizontal before:bg-[#23222f] after:bg-[#23222f]"></div>
+            <button class="btn btn-wide m-3 text-[#ebe9ed] font-roboto font-medium" (click)="redirector('/accepted')">Accepted</button>
+            <div class="divider divider-horizontal before:bg-[#23222f] after:bg-[#23222f]"></div>
+            <button class="btn btn-wide m-3 text-[#ebe9ed] font-roboto font-medium" (click)="redirector('/completed')">Completed</button>
+            <div class="divider divider-horizontal before:bg-[#23222f] after:bg-[#23222f]"></div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center flex flex-col items-center">
+        <div class="text-xl m-2 text-center text-[#ebe9ed]">Please note that you are allowed to have a maximum of 5 requests in total, combining both accepted and pending requests at any given time.</div>
+        <div class="text-lg m-2 text-center">Complete existing requests to join more campaigns.</div>
+</div>

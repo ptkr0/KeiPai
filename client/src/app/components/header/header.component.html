@@ -1,0 +1,56 @@
+<header class="app-header">
+    <div class="bg-[#141216] shadow py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <img src="/assets/KEIPAI_DARK.svg" alt="KeiPai" class="h-14" />
+            <nav class="flex">
+                @if (this.userService.user()) {
+                    @if (this.userService.user()?.role === 'XD') {
+                        <label class="input bg-[#191e24] input-bordered flex items-center gap-2 w-64">
+                            <input type="text" class="grow" placeholder="Find Creators" />
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 16 16"
+                              fill="currentColor"
+                              class="h-4 w-4 opacity-70">
+                              <path
+                                fill-rule="evenodd"
+                                d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                                clip-rule="evenodd" />
+                            </svg>
+                          </label>
+                    }
+                <a href="/messages" class="btn ml-4 "><ng-icon name=bootstrapEnvelopeFill size="20px"></ng-icon>Messages</a>
+                <a href="/campaigns" class="btn ml-4 ">Dashboard</a>
+                <details class="dropdown dropdown-end">
+                <summary class="btn ml-4 btn-circle"><ng-icon name=bootstrapPersonFill size="20px"></ng-icon></summary>
+                <ul class="menu dropdown-content bg-[#191e24] rounded-box z-[1] w-56 p-2 shadow mt-2">
+                    <li class="menu-title">Hello {{this.userService.user()?.username}} (oﾟvﾟ)ノ</li>
+                    <li><a href="profile/{{this.userService.user()?.username}}">Profile</a></li>
+                    <li><a href="settings">Settings</a></li>
+                    <li><a (click)="onLogout()">Logout</a></li>
+                  </ul>
+                </details>
+                }
+                @else if (this.userService.user() === null) {
+                <a href="/login" class="btn">Login</a>
+                <a onclick="select_register.showModal()" class="btn ml-4">Register</a>
+                }
+            </nav>
+        </div>
+    </div>
+</header>
+
+<dialog id="select_register" class="modal">
+    <div class="modal-box bg-[#23222f] text-[#ebe9ed]">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+          </form>
+      <h3 class="text-lg font-bold">Sign up as:</h3>
+        <div class="text-center py-4">
+            <a href="/register/developer" class="btn m-2 btn-lg btn-outline btn-success">Developer</a>
+            <a href="/register/influencer" class="btn m-2 btn-lg btn-outline btn-error">Influencer</a>
+        </div>
+      <div class="modal-action">
+      </div>
+    </div>
+</dialog>

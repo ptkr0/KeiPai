@@ -1,0 +1,29 @@
+<div class="card bg-[#353347] w-full h-[200px] max-h-[300px] my-2 flex flex-row items-start p-4">
+    @if (stream.stream.thumbnail !== "" && stream.stream.thumbnail !== null) {
+    <img
+      src="{{ this.getProperThumbnailUrl()}}"
+      lazyload
+      class="rounded-lg w-[250px] h-auto max-h-[150px] ml-3" />
+    }
+    @if (stream.stream.thumbnail === "") {
+      <div class="w-[250px] h-[150px] rounded-lg ml-3 text-center content-center bg-black">No stream thumbnail</div>
+    }
+    <div class="ml-4 text-left flex flex-col h-full">
+        @if(stream.stream.url === "") {
+        <div class="text-2xl font-bold w-[700px] text-ellipsis overflow-hidden whitespace-nowrap">{{stream.stream.title}}</div>
+        } @else {
+        <a class="text-2xl font-bold w-[700px] text-ellipsis overflow-hidden whitespace-nowrap link link-accent" href="{{stream.stream.url}}" target="_blank">{{stream.stream.title}}</a>
+        }
+        <h2 class="text-md">Stream Date: <span class="text-[#ebe9ed]">{{stream.stream.startDate | date}}</span></h2>
+        <h2 class="text-md">Stream Duration: <span class="text-[#ebe9ed]">{{ this.getStreamDuration() }}</span></h2>
+        <h2 class="text-md">Average Viewers: <span class="text-[#ebe9ed]">{{stream.stream.averageViewers}}</span></h2>
+        <h2 class="text-md">Peak Viewers: <span class="text-[#ebe9ed]">{{stream.stream.peakViewers}}</span></h2>
+        @if (stream.games.length > 0) {
+        <div class="overflow-hidden whitespace-pre-wrap w-[900px]">Games Mentioned: 
+            @for (game of stream.games; track game) {
+              <a href="game/{{game.id}}" class="badge text-[#ebe9ed] mr-1 items-center">{{game.name}}</a>
+            }
+        </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,245 @@
+<div class="flex w-full max-w-7xl relative mx-auto mt-4">
+    <div class="breadcrumbs text-sm py-2">
+        <ul class="flex">
+            @if (campaign?.game?.developerId === userService.user()?.id) {
+            <li><a href="campaigns">Campaigns</a></li>
+            } @if (campaign?.game?.developerId !== userService.user()?.id) {
+            <li><a href="campaigns">Campaigns</a></li>
+            <li><a href="profile/{{ campaign?.game?.developerName }}">{{ campaign?.game?.developerName }}</a></li>
+            }
+            <li>{{ campaign?.game?.name }}</li>
+        </ul>
+    </div>
+</div>
+
+<div class="flex flex-col w-full">
+    <div class="card w-full max-w-7xl bg-[#353347] shadow-xl mx-auto mb-4 p-4">
+        <div class="flex flex-row items-center">
+            <div class="flex flex-col w-[250px] h-[116px]">
+                @if (campaign?.game?.coverPhoto) {
+                <img src="{{ campaign?.game?.coverPhoto }}" lazyload class="rounded-lg shadow-2xl w-[250px] h-[116px] ml-1" />
+                } @if (!campaign?.game?.coverPhoto) {
+                <div class="w-[250px] h-[116px] rounded-lg shadow-2xl ml-1 text-center content-center bg-black">
+                    no game cover set
+                </div>
+                }
+            </div>
+            <div class="ml-4 text-left">
+                <h1 class="text-3xl font-bold text-[#ebe9ed] w-[600px] overflow-hidden whitespace-nowrap">
+                    {{ campaign?.game?.name }}
+                </h1>
+                <h2 class="text-xl">
+                    Release Date:
+                    <span class="text-[#ebe9ed]">{{ campaign?.game?.releaseDate }}</span>
+                </h2>
+                <div>
+                    Tags: @for (tag of campaign?.game?.tags; track tag) {
+                    <span class="badge text-[#ebe9ed] mr-1">{{ tag.name }}</span>
+                    }
+                </div>
+                <div>
+                    Platforms: @for (key of campaign?.keysLeftForCampaigns; track key) {
+                    @if(key.canBeRequested) {
+                    <div class="tooltip" [attr.data-tip]="key.name">
+                        <span class="text-[#ebe9ed] mr-1 items-center text-xl align-middle z-10"><ng-icon name="{{key.id | platformIcon}}"></ng-icon></span>
+                    </div>
+                    }
+                    @else {
+                    <div class="tooltip" data-tip="This platform is no longer available (either campaign ran out of available keys or request limit set by developer was reached)">
+                        <span class="text-[#ebe9ed] mr-1 items-center text-xl align-middle opacity-25"><ng-icon name="{{key.id | platformIcon}}"></ng-icon></span>
+                    </div>
+                    }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex flex-row justify-center max-w-7xl w-full mx-auto">
+        <div class="card w-2/3 bg-[#353347] shadow-xl mb-10 p-4 mr-4">
+            @if (campaign?.game?.screenshots || campaign?.game?.youtubeTrailer) {
+            <h1 class="text-3xl font-bold text-[#ebe9ed] mb-2">Media</h1>
+            <div class="mb-4" *ngIf="selectedMedia">
+                <ng-container [ngSwitch]="selectedMedia.type">
+                    <ng-container *ngSwitchCase="'image'">
+                        <img [src]="selectedMedia.source" class="rounded-lg w-[800px] h-[450px]" />
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'video'">
+                        <youtube-player [videoId]="selectedMedia.source" [width]="800" [height]="450"
+                            placeholderImageQuality="high"></youtube-player>
+                    </ng-container>
+                </ng-container>
+            </div>
+            <div class="mt-2 overflow-x-scroll space-x-2 whitespace-nowrap">
+                @if (videoId) {
+                <button (click)="onMediaClick({ type: 'video', source: videoId })">
+                    <img [src]="getVideoCoverUrl(videoId)" lazyload class="rounded-lg w-[200px] h-[113px] ml-1" />
+                </button>
+                } @for (screenshot of campaign?.game?.screenshots; track screenshot) {
+                <button (click)="
+                        onMediaClick({ type: 'image', source: screenshot.screenshot })">
+                    <img [src]="screenshot.screenshot" lazyload class="rounded-lg w-[200px] h-[113px] ml-1" />
+                </button>
+                }
+            </div>
+            <div class="divider"></div>
+            }
+            <h1 class="text-3xl font-bold text-[#ebe9ed]">Campaign Description</h1>
+            @if (campaign?.embargoDate) {
+            <h3 class="text-xl font-bold text-red-500">
+                This campaign is under embargo until {{ campaign?.embargoDate | date }}</h3>
+            }
+            @if (campaign?.description) {
+            <markdown ngPreserveWhitespaces [inline]="true">{{
+                campaign?.description
+            }}</markdown>
+            }
+            <div class="divider"></div>
+            <h1 class="text-3xl font-bold text-[#ebe9ed]">Game Description</h1>
+            @if (campaign?.game?.description) {
+            <markdown ngPreserveWhitespaces [inline]="true">{{
+                campaign?.game?.description
+            }}</markdown>
+            }
+        </div>
+
+        <div class="flex flex-col items-center w-1/3">
+            <div class="card w-full bg-[#353347] shadow-xl mb-4 p-4 h-auto">
+                @if (hasEnded()){ 
+                <h3 class="text-xl font-bold text-red-500">
+                    This Campaign Has Ended
+                </h3>
+                <div class="divider"></div>
+                <h5 class="text-lg text-[#ebe9ed] mb-2">
+                    You can no longer request keys to this campaign.<br>
+                    If you want to request key contact the developer directly or visit their profile page for other campaigns.
+                </h5>
+                }
+                @else if (!hasStarted()){
+                <h3 class="text-xl font-bold text-cyan-500">
+                    This campaign won't start until {{ campaign?.startDate | date }}.
+                </h3>
+                }
+                @else if (!hasEnded() && hasStarted()){ 
+                    <h3 class="text-xl font-bold text-green-500">
+                        This Campaign Is Active
+                    </h3>
+                    <h5 class="text-md text-[#ebe9ed]">
+                        @if (campaign?.endDate !== null) {
+                        This campaign has started on {{ campaign?.startDate | date }} and will end on {{ campaign?.endDate | date }}.
+                        } @else {
+                        This campaign has started on {{ campaign?.startDate | date }} and has no end date set.
+                        }
+                    </h5>
+                    <div class="divider"></div>
+                    <div class="tooltip" [attr.data-tip]="this.canRequest?.reasonMessage">
+                        <button class="btn btn-outline w-full flex items-center text-lg text-[#ebe9ed] mb-2 disabled:btn-disabled" [disabled]="!checkFinalIfCanRequest()" (click)="onRequestClick()">
+                            <ng-icon name="bootstrapKeyFill" size="30px" class="mr-2"></ng-icon>Request Key
+                        </button>
+                    </div>
+                    <h5 class="text-lg text-[#ebe9ed] font-bold">
+                        Minimum Requirements For This Campaign
+                    </h5>
+                    @if (campaign?.minimumYoutubeSubscribers !== null) {
+                    <span class="text-red-400">
+                        Minimum Youtube Subscribers:<span class="text-[#ebe9ed]"> {{ campaign?.minimumYoutubeSubscribers }}</span>
+                    </span>
+                    }
+                    @if (campaign?.minimumYoutubeAvgViews !== null) {
+                    <span class="text-red-400">
+                        Minimum Youtube Average Views:<span class="text-[#ebe9ed]"> {{ campaign?.minimumYoutubeAvgViews }}</span>
+                    </span>
+                    }
+                    @if (campaign?.minimumTwitchFollowers !== null) {
+                    <span class="text-purple-400">
+                        Minimum Twitch Followers:<span class="text-[#ebe9ed]"> {{ campaign?.minimumTwitchFollowers }}</span>
+                    </span>
+                    }
+                    @if (campaign?.minimumTwitchAvgViewers !== null) {
+                    <span class="text-purple-400">
+                        Minimum Twitch Average Viewers:<span class="text-[#ebe9ed]"> {{ campaign?.minimumTwitchAvgViewers }}</span>
+                    </span>
+                    }
+                    @if (campaign?.areThirdPartyWebsitesAllowed === 1) {
+                    <div class="text-[#ebe9ed]">
+                        Other Platforms Are Applicable
+                    </div>
+                    }
+                    @if (campaign?.areThirdPartyWebsitesAllowed === 2) {
+                    <div class="text-[#ebe9ed]">
+                        Only Verified Other Platforms Are Applicable
+                    </div>
+                    }
+                }
+            </div>
+            <div class="card w-full bg-[#353347] shadow-xl mb-4 p-4 h-auto">
+                <h3 class="text-xl font-bold text-[#ebe9ed]">
+                    Developed by {{ campaign?.game?.developerName }}
+                </h3>
+                <div class="divider"></div>
+                <a class="btn btn-outline w-full flex items-center text-lg text-[#ebe9ed] mb-2" href="/profile/{{campaign?.game?.developerName}}">
+                    <ng-icon name="bootstrapPersonFill" class="mr-2"></ng-icon>Visit Developer Page
+                </a>
+                <a class="btn btn-outline w-full flex items-center text-lg text-[#ebe9ed]" href="/messages/{{ campaign?.game?.developerId }}">
+                    <ng-icon name="bootstrapEnvelopeFill" class="mr-2"></ng-icon>Message Developer
+                </a>
+                @if (campaign?.game?.youtubeTag) {
+                <div class="divider"></div>
+                <div class="tooltip"
+                    data-tip="When making videos about this game be sure to include it in your video tags">
+                    <h3 class="text-lg text-red-400 text-left">
+                        <ng-icon name="bootstrapYoutube" class="mr-2"></ng-icon>Youtube Tag:
+                        <br />
+                        <div class="text-[#ebe9ed]">{{ campaign?.game?.youtubeTag }}</div>
+                    </h3>
+                </div>
+                } @if (campaign?.game?.twitchTagName) {
+                <div class="divider"></div>
+                <div class="tooltip" data-tip="When streaming this game be sure to change category to provided here">
+                    <h3 class="text-lg text-purple-400 text-left">
+                        <ng-icon name="bootstrapTwitch" class="mr-2"></ng-icon>Twitch
+                        Category: <br />
+                        <div class="text-[#ebe9ed]">{{ campaign?.game?.twitchTagName }}</div>
+                    </h3>
+                </div>
+                } @if (campaign?.game?.pressKit) {
+                <div class="divider"></div>
+                <a class="btn btn-outline w-full flex items-center text-lg text-[#ebe9ed]" href="{{ campaign?.game?.pressKit }}"
+                    target="_blank">
+                    <ng-icon name="bootstrapNewspaper" class="mr-2"></ng-icon>Press Kit
+                </a>
+                }
+            </div>
+
+            <div class="card w-full max-w-7xl bg-[#353347] shadow-xl mb-1 p-4 h-auto">
+                <h3 class="text-xl font-bold text-[#ebe9ed]">
+                    Additional Informations
+                </h3>
+                <div class="divider"></div>
+                @if (campaign?.game?.minimumCPU) {
+                <span>Minimum CPU: <span class="text-[#ebe9ed]">{{ campaign?.game?.minimumCPU }}</span></span>
+                <br />
+                } @if (campaign?.game?.minimumRAM) {
+                <span>Minimum RAM: <span class="text-[#ebe9ed]">{{ campaign?.game?.minimumRAM }}</span></span>
+                <br />
+                } @if (campaign?.game?.minimumGPU) {
+                <span>Minimum GPU: <span class="text-[#ebe9ed]">{{ campaign?.game?.minimumGPU }}</span></span>
+                <br />
+                } @if (campaign?.game?.minimumStorage) {
+                <span>
+                    Minimum Storage: <span class="text-[#ebe9ed]">{{ campaign?.game?.minimumStorage }}</span>
+                </span>
+                <br />
+                } @if (campaign?.game?.minimumOS) {
+                <span>Minimum OS: <span class="text-[#ebe9ed]">{{ campaign?.game?.minimumOS }}</span></span>
+                <br />
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@if(isRequestKeyDialogVisible){
+    <app-request-key-dialog [visible]="isRequestKeyDialogVisible" [platforms]="this.campaign?.keysLeftForCampaigns" [media]="this.finalPlatforms" [codeDistribution]="this.campaign?.autoCodeDistribution" [campaignId]="this.campaign!.id" (confirm)="onRequestDialogConfirm($event)" (cancel)="onRequestDialogCancel()">
+    </app-request-key-dialog>
+}

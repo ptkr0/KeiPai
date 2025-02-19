@@ -1,0 +1,63 @@
+<app-influencer-navigation></app-influencer-navigation>
+
+<div class="flex flex-row items-start max-w-7xl w-full mx-auto min-h-screen">
+
+    <div class="flex flex-col align-middle items-center pr-4 w-1/4 my-4">
+        <div class="card bg-[#353347] mr-4 mb-4 w-full max-w-xs">
+            <div class="card-body p-4 text-center text-md text-[#ebe9ed]">
+                There are {{ pagination?.totalCount }} campaign(s) available
+            </div>
+        </div>
+        <div class="card bg-[#353347] mr-4 w-full max-w-xs">
+            <div class="card-body p-4">
+                <div class="collapse collapse-arrow bg-[#23222f] w-full">
+                    <input type="checkbox" />
+                    <div class="collapse-title text-lg text-[#ebe9ed]">Platforms</div>
+                    <div class="collapse-content">
+                        @for(platform of platforms; track platform) {
+                        <div class="flex flex-row items-center my-2">
+                            <input type="checkbox" class="checkbox size-5" [(ngModel)]="platform.selected"/>
+                            <label class="text-[#ebe9ed] ml-2 text-sm">{{ platform.name }}</label>
+                        </div>
+                        }
+                    </div>
+                </div>
+                <div class="collapse collapse-arrow bg-[#23222f] w-full">
+                    <input type="checkbox" />
+                    <div class="collapse-title text-lg text-[#ebe9ed]">Tags</div>
+                    <div class="collapse-content">
+                        <input type="text" class="input input-sm input-bordered w-full bg-inherit" placeholder="Search tags..." (input)="onFilterInputChange($event)"/>
+                        @for(tag of filteredTags; track tag) {
+                        <div class="flex flex-row items-center my-2">
+                            <input type="checkbox" class="checkbox size-5" [(ngModel)]="tag.selected" />
+                            <label class="text-[#ebe9ed] ml-2 text-sm">{{ tag.name }}</label>
+                        </div>
+                        }
+                    </div>
+                </div>
+                <div class="flex flex-row items-center">
+                    <input type="checkbox" class="checkbox" [(ngModel)]="isIncludeSoonSelected"/>
+                    <label class="text-[#ebe9ed] ml-2 text-sm">Include Coming Soon Campaigns</label>
+                </div>
+                <button class="btn btn-info mt-2" (click)="onFilterClick()">Filter</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex flex-col align-middle justify-center my-2 pl-4 w-3/4">
+        <div class="flex flex-col items-center justify-start">
+            @for(campaign of campaigns; track campaign)
+            {
+                <app-campaign class="w-full" [campaign]="campaign"></app-campaign>
+            }
+            @if((pagination?.totalPages ?? 0) > 1)
+            {
+                <div class="join align-bottom p-4">
+                    <button (click)="prevPage()" class="join-item btn btn-info" [disabled]="(pagination?.currentPage ?? 0) <= 1">«</button>
+                    <button class="join-item mx-2"> Page {{ pagination?.currentPage }} of {{ pagination?.totalPages }} </button>
+                    <button (click)="nextPage()" class="join-item btn btn-info" [disabled]="(pagination?.currentPage ?? 0) >= (pagination?.totalPages ?? 0)">»</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>

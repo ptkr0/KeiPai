@@ -1,0 +1,47 @@
+<button class="card bg-[#353347] w-[1150px] h-[70px] m-2 flex flex-row items-center hover:cursor-default">
+    <button (click)="redirector(this.request.campaignId, '/campaign/')">
+        @if (request.gameCover !== "") {
+        <img
+        src="{{request.gameCover}}"
+        lazyload
+        class="rounded-lg w-auto h-[50px] ml-5" />
+        }
+        @if (request.gameCover === "") {
+        <div class="w-auto h-[50px] rounded-lg ml-5 text-center content-center bg-black">no game cover set</div>
+        }
+    </button>
+    <div class="divider lg:divider-horizontal before:bg-[#23222f] after:bg-[#23222f]"></div>
+    <div (click)="redirector(this.request.campaignId, '/campaign/')" class="cursor-pointer">
+        <h1>Campaign ID</h1>
+        <h1 class="text-[#ebe9ed] text-ellipsis overflow-hidden whitespace-nowrap">{{request.campaignId}}</h1>
+    </div>
+    <div class="divider lg:divider-horizontal before:bg-[#23222f] after:bg-[#23222f]"></div>
+    <div (click)="redirector(this.request.gameId, '/game/')" class="cursor-pointer w-[120px]">
+        <h1>Game</h1>
+        <h1 class="text-[#ebe9ed] text-ellipsis overflow-hidden whitespace-nowrap">{{request.gameName}}</h1>
+    </div>
+    <div class="divider lg:divider-horizontal before:bg-[#23222f] after:bg-[#23222f]"></div>
+    <div>
+        <h1>Platform</h1>
+        <h1 class="text-[#ebe9ed]  text-ellipsis overflow-hidden whitespace-nowrap"><ng-icon name="{{request.platform | platformIcon}}"></ng-icon></h1>
+    </div>
+    <div class="divider lg:divider-horizontal before:bg-[#23222f] after:bg-[#23222f]"></div>
+    <div>
+        <h1>Media</h1>
+        <h1 class="text-[#ebe9ed] text-ellipsis overflow-hidden whitespace-nowrap"><ng-icon name="{{request.media | mediaIcon}}"></ng-icon></h1>
+    </div>
+    <div class="divider lg:divider-horizontal before:bg-[#23222f] after:bg-[#23222f]"></div>
+    <div class="w-28">
+        <h1>Request Date</h1>
+        <h1 class="text-[#ebe9ed] text-ellipsis overflow-hidden whitespace-nowrap">{{request.requestDate | date}}</h1>
+    </div>
+    <div class="divider lg:divider-horizontal before:bg-[#23222f] after:bg-[#23222f]"></div>
+    <div>
+        <h1>Key Status</h1>
+        <h1 class="text-[#ebe9ed] text-ellipsis overflow-hidden whitespace-nowrap">Pending</h1>
+    </div>
+    <div class="divider lg:divider-horizontal before:bg-[#23222f] after:bg-[#23222f]"></div>
+    <div class="flex-grow text-center">
+        <button class="btn btn-sm btn-outline btn-error mr-6" (click)="cancelRequest(request.id)">Withdraw Request</button>
+    </div>
+</button>

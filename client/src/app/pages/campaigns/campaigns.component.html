@@ -1,0 +1,6 @@
+@if(userService.user()?.role === "Developer"){
+    <app-developer-campaigns></app-developer-campaigns>
+}
+@else if(userService.user()?.role === "Influencer"){
+    <app-influencer-campaigns></app-influencer-campaigns>
+}

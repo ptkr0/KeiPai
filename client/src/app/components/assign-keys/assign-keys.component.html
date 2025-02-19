@@ -1,0 +1,31 @@
+<div class="flex flex-wrap">
+    @for(key of keys; track key) {
+      <div class="w-full md:w-1/2 mb-4 p-2">
+        <div class="flex items-center bg-[#23222f] p-4 rounded-lg shadow-md">
+            <span class="text-[#ebe9ed] mr-2 text-2xl">
+              <ng-icon [name]="key.platformId | platformIcon"></ng-icon>
+            </span>
+            <input
+            type="range"
+            min="0"
+            [value]="getSelectedNumberOfKeys(key.platformId)"
+            [max]="key.count"
+            class="range flex-grow mx-2"
+            (input)="onSliderChange($event, key.platformId)"
+          />
+          <label class="flex items-center px-2">
+            <input
+              type="checkbox"
+              class="checkbox mr-2"
+              [checked]="getIsUnlimited(key.platformId)"
+              (change)="onCheckboxChange($event, key.platformId)"
+            />
+            <span class="text-[#ebe9ed] text-xs mr-2">Set Unlimited</span>
+          </label>
+          <span class="text-[#ebe9ed] text-sm w-[40px]">
+            {{ getSelectedNumberOfKeys(key.platformId) }}/{{ key.count }}
+          </span>
+          </div>
+      </div>
+    }
+</div>

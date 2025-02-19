@@ -1,0 +1,107 @@
+<div class="flex w-full max-w-xl relative mx-auto mt-4">
+    <div class="breadcrumbs text-sm py-2">
+        <ul class="flex">
+            <li><a href="campaigns">Home</a></li>
+            <li><a href="profile/{{this.developer?.username}}">{{this.developer?.username}}</a></li>
+            <li><a href="settings">Settings</a></li>
+        </ul>
+    </div>
+  </div>
+
+<div class="card w-full max-w-xl bg-[#353347] shadow-xl mx-auto mb-10">
+    <div class="card-body">
+        <form [formGroup]="editProfileForm" (ngSubmit)="onSubmit()">
+        <h2 class="card-title text-[#ebe9ed] text-3xl text-center">Edit Profile</h2>
+        <div class="form-control mb-2">
+            <label class="label" for="name">
+                <span class="label-text text-lg">Studio Name</span>
+            </label>
+            <input type="text" id="username" placeholder="Type your studio name here" formControlName="username"
+                class="input input-bordered bg-[#353347] border-[#ebe9ed]" [ngClass]="{
+                    'input-error':
+                    (editProfileForm.get('username')?.hasError('required') || editProfileForm.get('username')?.hasError('maxlength')) &&
+                    editProfileForm.get('username')?.touched,
+                    'input-success': editProfileForm.get('username')?.valid
+                  }" />
+            <label class="label">
+                <span class="label-text-alt text-error">
+                    @if(editProfileForm.get('username')?.hasError('required') &&
+                    editProfileForm.get('username')?.touched) { Studio Name is required. }
+                    @if(editProfileForm.get('username')?.hasError('maxlength') &&
+                    editProfileForm.get('username')?.touched) { Character limit reached. }
+                    @if(editProfileForm.get('username')?.hasError('usernameTaken') &&
+                    editProfileForm.get('username')?.touched) { Studio Name is already taken. }
+                </span>
+            </label>
+        </div>
+
+        <div class="form-control mb-2">
+            <label class="label" for="contactEmail">
+                <span class="label-text text-lg">Contact e-mail</span>
+            </label>
+            <input type="email" id="contactEmail" placeholder="Enter your contact e-mail here" formControlName="contactEmail"
+                class="input input-bordered bg-[#353347] border-[#ebe9ed]" [ngClass]="{
+                    'input-error':
+                    editProfileForm.get('contactEmail')?.hasError('email') &&
+                    editProfileForm.get('contactEmail')?.touched,
+                    'input-success': editProfileForm.get('contactEmail')?.valid
+                  }" />
+            <label class="label">
+                <span class="label-text-alt text-error">
+                    @if(editProfileForm.get('contactEmail')?.hasError('email') &&
+                    editProfileForm.get('contactEmail')?.touched) { Enter a valid e-mail address. }
+                </span>
+            </label>
+        </div>
+
+        <div class="form-control mb-2">
+            <label class="label" for="url">
+                <span class="label-text text-lg">Website URL</span>
+            </label>
+            <input type="url" id="url" placeholder="Enter your website URL" formControlName="url"
+                class="input input-bordered bg-[#353347] border-[#ebe9ed]" [ngClass]="{
+                    'input-error':
+                    editProfileForm.get('url')?.hasError('pattern') &&
+                    editProfileForm.get('url')?.touched,
+                    'input-success': editProfileForm.get('url')?.valid
+                  }" />
+            <label class="label">
+                <span class="label-text-alt text-error">
+                    @if(editProfileForm.get('url')?.hasError('pattern') &&
+                    editProfileForm.get('url')?.touched) { Enter a valid URL. }
+                </span>
+            </label>
+        </div>
+
+        <div class="form-control mb-2">
+            <label class="label" for="about">
+                <span class="label-text text-lg">About</span>
+            </label>
+            <textarea id="about" placeholder="Express yourself up to 200 characters" formControlName="about"
+                class="input input-bordered bg-[#353347] border-[#ebe9ed] h-48" [ngClass]="{
+                    'input-error':
+                    editProfileForm.get('about')?.hasError('maxlength') &&
+                    editProfileForm.get('about')?.touched,
+                    'input-success': editProfileForm.get('about')?.valid
+                  }">
+            </textarea>
+            <label class="label">
+                <span class="label-text-alt text-error">
+                    @if(editProfileForm.get('about')?.hasError('maxlength') &&
+                    editProfileForm.get('about')?.touched) { Character limit reached. }
+                </span>
+            </label>
+        </div>
+
+        @if (success) {
+            <div class="text-center text-success m-2">Profile Successfully Updated</div>
+        }
+
+        <button type="submit"
+        class="bg-blue-500 rounded-full p-4 shadow w-full text-xl font-medium text-white hover:bg-blue-700 disabled:bg-gray-600 disabled:text-black disabled:opacity-65 disabled:cursor-not-allowed"
+            [disabled]="editProfileForm.invalid">
+            Save Changes
+        </button>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,87 @@
+@if (visible) {
+    <div class="modal modal-open">
+        <div class="modal-box bg-[#23222f] text-[#ebe9ed]">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="modal-top font-bold text-xl">Submit Content for {{ game?.name }}</h3>
+                @if (game?.cover) {
+                    <img [src]="game?.cover" alt="{{ game?.name }} cover" class="w-24 h-auto rounded-md mr-4" />
+                }
+            </div>
+            <div class="modal-content">
+                <form [formGroup]="addContentForm" (ngSubmit)="onSubmit()" autocomplete="off">
+                    <div class="form-control mb-4">
+                        <label class="label" for="title">
+                            <span class="label-text">Article Title</span>
+                        </label>
+                        <input type="text" id="title" formControlName="title" class="input input-bordered bg-[#23222f] border-[#ebe9ed] w-full"
+                            placeholder="Enter article title" [ngClass]="{
+                                'input-error': addContentForm.get('title')?.invalid && addContentForm.get('title')?.touched,
+                                'input-success': addContentForm.get('title')?.valid
+                              }" />
+                        <label class="label">
+                            <span class="label-text-alt text-error">
+                                @if (addContentForm.get('title')?.invalid && addContentForm.get('title')?.touched) { Title is required. }
+                            </span>
+                        </label>
+                    </div>
+                    <div class="form-control mb-4">
+                        <label class="label" for="description">
+                            <span class="label-text">Description</span>
+                        </label>
+                        <textarea id="description" formControlName="description" class="textarea textarea-bordered bg-[#23222f] border-[#ebe9ed] w-full"
+                            placeholder="Enter article description" [ngClass]="{
+                                'input-error': addContentForm.get('description')?.invalid && addContentForm.get('description')?.touched,
+                                'input-success': addContentForm.get('description')?.valid
+                              }">
+                        </textarea>
+                        <label class="label">
+                            <span class="label-text-alt text-error">
+                                @if (addContentForm.get('description')?.invalid && addContentForm.get('description')?.touched) { Description is required. }
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="form-control mb-4">
+                        <label class="label" for="url">
+                            <span class="label-text">URL</span>
+                        </label>
+                        <input type="url" id="url" formControlName="url" class="input input-bordered bg-[#23222f] border-[#ebe9ed] w-full"
+                            placeholder="Enter article URL" [ngClass]="{
+                                'input-error': addContentForm.get('url')?.invalid && addContentForm.get('url')?.touched,
+                                'input-success': addContentForm.get('url')?.valid
+                              }" />
+                        <label class="label">
+                            <span class="label-text-alt text-error">
+                                @if (addContentForm.get('url')?.hasError('required') && addContentForm.get('url')?.touched) { URL is required. }
+                                @if (addContentForm.get('url')?.hasError('pattern') && addContentForm.get('url')?.touched) { Enter a valid URL. }
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="form-control mb-4">
+                        <label class="label" for="thumbnail">
+                            <span class="label-text">Thumbnail</span>
+                        </label>
+                        <input type="file" id="thumbnail" accept="image/jpeg, image/png, image/webp" (change)="onFileSelected($event); $event.stopPropagation()" class="file-input file-input-bordered bg-[#23222f] border-[#ebe9ed] w-full"
+                            [ngClass]="{
+                                'input-error': addContentForm.get('thumbnail')?.invalid && addContentForm.get('thumbnail')?.touched,
+                                'input-success': addContentForm.get('thumbnail')?.valid
+                              }" />
+                        <label class="label">
+                            <span class="label-text-alt text-error">
+                                @if (addContentForm.get('thumbnail')?.invalid && addContentForm.get('thumbnail')?.touched) { Thumbnail is required. }
+                                @if (addContentForm.get('thumbnail')?.hasError('invalidType')) { Only image files are allowed. }
+                                @if (addContentForm.get('thumbnail')?.hasError('maxSize')) { File size should be less than 1MB. }
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="modal-action">
+                        <button class="btn btn-primary" (click)="onCancel(); $event.stopPropagation()" type="button">Cancel</button>
+                        <button class="btn btn-success" [disabled]="addContentForm.invalid" type="submit">Submit Media</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,63 @@
+@if(visible) {
+<div class="modal modal-open">
+  <div class="modal-box bg-[#23222f] text-[#ebe9ed]">
+    <h3 class="modal-top font-bold text-xl">Connect Other Media Platform</h3>
+    <div class="modal-content">
+      <form [formGroup]="addOtherMediaForm" (ngSubmit)="onSubmit()" autocomplete="off">
+        <label div="form-control">
+          <div class="label">
+            <span class="label-text">Press Outlet Name</span>
+          </div>
+          <input type="text" id="name" formControlName="name" class="input bg-[#23222f] border-[#ebe9ed] w-full"
+            placeholder="Enter press outlet name" />
+        </label>
+        <div class="divider"></div>
+        <label div="form-control">
+          <div class="label">
+            <span class="label-text">Press Outlet Domain</span>
+          </div>
+          <input type="url" id="url" formControlName="url" class="input bg-[#23222f] border-[#ebe9ed] w-full"
+            placeholder="e.g. https://www.example.com" />
+        </label>
+        <div class="divider"></div>
+        <label div="form-control">
+          <div class="label">
+            <span class="label-text">Medium</span>
+          </div>
+          <select id="medium" formControlName="medium" class="select bg-[#23222f] border-[#ebe9ed] w-full">
+            <option value="" disabled selected>Select appropiate medium</option>
+            @for(medium of mediums; track medium) {
+            <option value="{{ medium }}">{{ medium }}</option>
+            }
+          </select>
+        </label>
+        <div class="divider"></div>
+        <label div="form-control">
+          <div class="label">
+            <span class="label-text">Your Role</span>
+          </div>
+          <select id="role" formControlName="role" class="select bg-[#23222f] border-[#ebe9ed] w-full">
+            <option value="" disabled selected>Select role that suits you best</option>
+            @for(role of roles; track role) {
+            <option value="{{ role }}">{{ role }}</option>
+            }
+          </select>
+        </label>
+        <div class="divider"></div>
+        <label class="form-control" for="sampleContent">
+          <div class="label">
+            <span class="label-text">Sample Content</span>
+          </div>
+          <textarea id="sampleContent" placeholder="e.g. example.com/reviews/gamereview.html"
+            formControlName="sampleContent" class="input input-bordered bg-[#23222f] border-[#ebe9ed]">
+                </textarea>
+        </label>
+        <div class="modal-action">
+          <button class="btn btn-primary" (click)="onCancel()" type="button">Cancel</button>
+          <button class="btn btn-success" [disabled]="this.addOtherMediaForm.invalid" type="submit">Submit Media</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+}

@@ -1,0 +1,26 @@
+@if (loading) {
+    <div class="flex items-center justify-center h-screen">
+        <div class="max-w-max">
+            <div class="loading loading-spinner loading-lg align-middle"></div>
+        </div>
+    </div>
+}
+@else{
+    @if (this.profile?.influencer) {
+        <app-influencer-profile [profile]="this.profile?.influencer"></app-influencer-profile>
+    }
+    @if (this.profile?.developer) {
+        <app-developer-profile [profile]="this.profile?.developer"></app-developer-profile>
+    }
+    @else if (this.profile === undefined) {
+        <div class="flex items-center justify-center h-max">
+            <div class="max-w-max">
+                <p class="flex justify-center m-5"><img src="/assets/KEIPAI_LIGHT.svg" alt="KeiPai" class="w-[500px]" /></p>
+                <p class="text-white text-center text-3xl mt-4 font-roboto">WOMP WOMP Error: 404</p>
+                <p class="text-white text-center text-xl mt-4 font-roboto">Profile {{this.username}} Not Found</p>
+                <p class="text-center"><a href="/campaigns" class="btn btn-info mt-4">Go Back To Main Page</a></p>
+            </div>
+        </div>
+    }
+}
+

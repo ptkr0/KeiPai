@@ -1,0 +1,10 @@
+<app-influencer-navigation></app-influencer-navigation>
+
+<div class="flex flex-col items-center justify-center my-4">
+    <div class="flex flex-col items-center">
+        @for(request of requests; track request)
+        {
+            <app-request-completed [request]="request"></app-request-completed>
+        }
+    </div>
+</div>

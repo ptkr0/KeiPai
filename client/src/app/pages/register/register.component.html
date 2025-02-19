@@ -1,0 +1,336 @@
+@if(type === 'influencer'){
+<div class="card w-full max-w-md bg-[#353347] shadow-xl mx-auto my-10">
+  <div class="card-body">
+    <h2 class="card-title text-[#ebe9ed] text-center">Register here as an influencer</h2>
+    <h5 class="card-normal text-[#ebe9ed]">If you want to register as a developer <a class="link link-accent" href="/register/developer">click here!</a></h5>
+    <form
+      [formGroup]="registerFormInfluencer"
+      (ngSubmit)="onSubmitInfluencer()"
+      autocomplete="off"
+      novalidate
+    >
+      <div class="form-control mb-2">
+        <label class="label" for="name">
+          <span class="label-text text-[#ebe9ed]">Username</span>
+        </label>
+        <input
+          type="text"
+          id="name"
+          placeholder="What is your username?"
+          formControlName="name"
+          class="input input-bordered w-full bg-[#353347] border-[#ebe9ed]"
+          [ngClass]="{
+            'input-error':
+            registerFormInfluencer.get('name')?.hasError('required') &&
+            registerFormInfluencer.get('name')?.touched,
+            'input-success': registerFormInfluencer.get('name')?.valid
+          }"
+        />
+        <label class="label">
+          <span class="label-text-alt text-error">
+            @if (registerFormInfluencer.get('name')?.hasError('required') &&
+            registerFormInfluencer.get('name')?.touched) { Username is required. }
+          </span>
+        </label>
+      </div>
+
+      <div class="form-control mb-2">
+        <label class="label" for="email">
+          <span class="label-text text-[#ebe9ed]">Email Address</span>
+        </label>
+        <input
+          type="text"
+          id="email"
+          placeholder="What is your email address?"
+          formControlName="email"
+          class="input input-bordered w-full bg-[#353347] border-[#ebe9ed]"
+          [ngClass]="{
+            'input-error':
+            registerFormInfluencer.get('email')?.hasError('required') &&
+            registerFormInfluencer.get('email')?.touched,
+            'input-success': registerFormInfluencer.get('email')?.valid
+          }"
+        />
+        <label class="label">
+          <span class="label-text-alt text-error">
+            @if (registerFormInfluencer.get('email')?.hasError('required') &&
+            registerFormInfluencer.get('email')?.touched) { Email Address is required. }
+          </span>
+        </label>
+      </div>
+
+      <div class="form-control mb-2">
+        <label class="label" for="password">
+          <span class="label-text text-[#ebe9ed]">Password</span>
+        </label>
+        <input
+          type="password"
+          id="password"
+          placeholder="Password"
+          formControlName="password"
+          class="input input-bordered w-full bg-[#353347] border-[#ebe9ed]"
+          [ngClass]="{
+            'input-error':
+            registerFormInfluencer.get('password')?.hasError('required') || registerFormInfluencer.get('password')?.hasError('minlength') &&
+            registerFormInfluencer.get('password')?.touched,
+            'input-success': registerFormInfluencer.get('password')?.valid
+          }"
+        />
+        <label class="label">
+          <span class="label-text-alt text-error">
+            @if (registerFormInfluencer.get('password')?.hasError('required') &&
+            registerFormInfluencer.get('password')?.touched) { Password is required. }
+            @if (registerFormInfluencer.get('password')?.hasError('minlength') &&
+            registerFormInfluencer.get('password')?.touched) { Password must be at least 8 characters long. }
+            @if (registerFormInfluencer.get('password')?.hasError('pattern') &&
+            registerFormInfluencer.get('password')?.touched) { Password must contain at least one uppercase letter, one lowercase letter, and one number. }
+          </span>
+        </label>
+      </div>
+
+      <div class="form-control mb-2">
+        <label class="label" for="confirmPassword">
+          <span class="label-text text-[#ebe9ed]">Confirm Password</span>
+        </label>
+        <input
+          type="password"
+          id="confirmPassword"
+          placeholder="Confirm Password"
+          formControlName="confirmPassword"
+          class="input input-bordered w-full bg-[#353347] border-[#ebe9ed]"
+          [ngClass]="{
+            'input-error':
+            registerFormInfluencer.get('confirmPassword')?.hasError('required') &&
+            registerFormInfluencer.get('confirmPassword')?.touched,
+            'input-success': registerFormInfluencer.get('confirmPassword')?.valid
+          }"
+        />
+        <label class="label">
+          <span class="label-text-alt text-error">
+            @if (registerFormInfluencer.get('confirmPassword')?.hasError('required') && registerFormInfluencer.get('confirmPassword')?.touched) {
+              Confirm Password is required.
+            }
+            @if (registerFormInfluencer.get('confirmPassword')?.hasError('passwordMismatch') && registerFormInfluencer.get('confirmPassword')?.touched) {
+              Passwords do not match.
+            }
+          </span>
+        </label>
+      </div>
+
+      <div class="form-control mb-2">
+        <label class="label" for="language">
+          <span class="label-text text-[#ebe9ed]">Your Language</span>
+        </label>
+        <select
+          id="language"
+          formControlName="language"
+          class="select select-bordered w-full bg-[#353347] border-[#ebe9ed]"
+        >
+          <option value="" disabled selected>Select Language</option>
+          <option value="en">English</option>
+          <option value="es">Spanish</option>
+          <option value="fr">French</option>
+          <option value="de">German</option>
+          <option value="pl">Polish</option>
+          <option value="it">Italian</option>
+          <option value="ru">Russian</option>
+          <option value="zh">Chinese</option>
+          <option value="ja">Japanese</option>
+          <option value="ko">Korean</option>
+        </select>
+      </div>
+
+      <div class="form-control mb-4">
+        <label class="label" for="contactEmail">
+          <span class="label-text text-[#ebe9ed]"
+            >Contact Email (Optional)</span
+          >
+        </label>
+        <input
+          type="text"
+          id="contactEmail"
+          placeholder="Useful when you have a separate contact email"
+          formControlName="contactEmail"
+          class="input input-bordered w-full bg-[#353347] border-[#ebe9ed]"
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary text-white w-full"
+        [disabled]="registerFormInfluencer.invalid"
+      >
+        Register
+      </button>
+    </form>
+    <div class="text-center">You already have an account? <a class="link link-accent" href="/login">Login now!</a></div>
+  </div>
+</div>
+}
+@if(type === 'developer'){
+    <div class="card w-full max-w-md bg-[#353347] shadow-xl mx-auto my-10">
+        <div class="card-body">
+          <h2 class="card-title text-[#ebe9ed] text-center">Register here as a developer</h2>
+          <h5 class="card-normal text-[#ebe9ed]">If you want to register as an influencer <a class="link link-accent" href="/register/influencer">click here!</a></h5>
+          <form
+            [formGroup]="registerFormDeveloper"
+            (ngSubmit)="onSubmitDeveloper()"
+            autocomplete="off"
+            novalidate
+          >
+            <div class="form-control mb-2">
+              <label class="label" for="name">
+                <span class="label-text text-[#ebe9ed]">Studio Name</span>
+              </label>
+              <input
+                type="text"
+                id="name"
+                placeholder="What is your username/studio name?"
+                formControlName="name"
+                class="input input-bordered w-full bg-[#353347] border-[#ebe9ed]"
+                [ngClass]="{
+                  'input-error':
+                  registerFormDeveloper.get('name')?.hasError('required') &&
+                  registerFormDeveloper.get('name')?.touched,
+                  'input-success': registerFormDeveloper.get('name')?.valid
+                }"
+              />
+              <label class="label">
+                <span class="label-text-alt text-error">
+                  @if (registerFormDeveloper.get('name')?.hasError('required') &&
+                  registerFormDeveloper.get('name')?.touched) { Studio Name is required. }
+                </span>
+              </label>
+            </div>
+      
+            <div class="form-control mb-2">
+              <label class="label" for="email">
+                <span class="label-text text-[#ebe9ed]">Email Address</span>
+              </label>
+              <input
+                type="text"
+                id="email"
+                placeholder="What is your email address?"
+                formControlName="email"
+                class="input input-bordered w-full bg-[#353347] border-[#ebe9ed]"
+                [ngClass]="{
+                  'input-error':
+                  registerFormDeveloper.get('email')?.hasError('required') &&
+                  registerFormDeveloper.get('email')?.touched,
+                  'input-success': registerFormDeveloper.get('email')?.valid
+                }"
+              />
+              <label class="label">
+                <span class="label-text-alt text-error">
+                  @if (registerFormDeveloper.get('email')?.hasError('required') &&
+                  registerFormDeveloper.get('email')?.touched) { Email Address is required. }
+                </span>
+              </label>
+            </div>
+      
+            <div class="form-control mb-2">
+              <label class="label" for="password">
+                <span class="label-text text-[#ebe9ed]">Password</span>
+              </label>
+              <input
+                type="password"
+                id="password"
+                placeholder="Password"
+                formControlName="password"
+                class="input input-bordered w-full bg-[#353347] border-[#ebe9ed]"
+                [ngClass]="{
+                  'input-error':
+                  registerFormDeveloper.get('password')?.hasError('required') || registerFormDeveloper.get('password')?.hasError('minlength') &&
+                  registerFormDeveloper.get('password')?.touched,
+                  'input-success': registerFormDeveloper.get('password')?.valid
+                }"
+              />
+              <label class="label">
+                <span class="label-text-alt text-error">
+                  @if (registerFormDeveloper.get('password')?.hasError('required') &&
+                  registerFormDeveloper.get('password')?.touched) { Password is required. }
+                  @if (registerFormDeveloper.get('password')?.hasError('minlength') &&
+                  registerFormDeveloper.get('password')?.touched) { Password must be at least 8 characters long. }
+                  @if (registerFormDeveloper.get('password')?.hasError('pattern') &&
+                  registerFormDeveloper.get('password')?.touched) { Password must contain at least one uppercase letter, one lowercase letter, and one number. }
+                </span>
+              </label>
+            </div>
+      
+            <div class="form-control mb-2">
+              <label class="label" for="confirmPassword">
+                <span class="label-text text-[#ebe9ed]">Confirm Password</span>
+              </label>
+              <input
+                type="password"
+                id="confirmPassword"
+                placeholder="Confirm Password"
+                formControlName="confirmPassword"
+                class="input input-bordered w-full bg-[#353347] border-[#ebe9ed]"
+                [ngClass]="{
+                  'input-error':
+                  registerFormDeveloper.get('confirmPassword')?.hasError('required') || registerFormDeveloper.get('confirmPassword')?.hasError('passwordMismatch') &&
+                  registerFormDeveloper.get('confirmPassword')?.touched,
+                  'input-success': registerFormDeveloper.get('confirmPassword')?.valid
+                }"
+              />
+              <label class="label">
+                <span class="label-text-alt text-error">
+                  @if (registerFormDeveloper.get('confirmPassword')?.hasError('required') && registerFormDeveloper.get('confirmPassword')?.touched) {
+                    Confirm Password is required.
+                  }
+                  @if (registerFormDeveloper.get('confirmPassword')?.hasError('passwordMismatch') && registerFormDeveloper.get('confirmPassword')?.touched) {
+                    Passwords do not match.
+                  }
+                </span>
+              </label>
+            </div>
+      
+            <div class="form-control mb-2">
+                <label class="label" for="siteUrl">
+                  <span class="label-text text-[#ebe9ed]"
+                    >URL to your website</span
+                  >
+                </label>
+                <input
+                  type="text"
+                  id="contactEmail"
+                  placeholder="Link to your website"
+                  formControlName="siteUrl"
+                  class="input input-bordered w-full bg-[#353347] border-[#ebe9ed]"
+                />
+                <label class="label">
+                    <span class="label-text-alt text-error">
+                      @if (registerFormDeveloper.get('siteUrl')?.hasError('validUrl') &&
+                      registerFormDeveloper.get('siteUrl')?.touched) { Must be a valid URL. }
+                    </span>
+                  </label>
+              </div>
+      
+            <div class="form-control mb-4">
+              <label class="label" for="contactEmail">
+                <span class="label-text text-[#ebe9ed]"
+                  >Contact Email (Optional)</span
+                >
+              </label>
+              <input
+                type="text"
+                id="contactEmail"
+                placeholder="Useful when you have a separate contact email"
+                formControlName="contactEmail"
+                class="input input-bordered w-full bg-[#353347] border-[#ebe9ed]"
+              />
+            </div>
+      
+            <button
+              type="submit"
+              class="btn btn-primary text-white w-full"
+              [disabled]="registerFormDeveloper.invalid"
+            >
+              Register
+            </button>
+          </form>
+          <div class="text-center">You already have an account? <a class="link link-accent" href="/login">Login now!</a></div>
+        </div>
+      </div>
+}

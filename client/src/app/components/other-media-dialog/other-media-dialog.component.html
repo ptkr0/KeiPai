@@ -1,0 +1,34 @@
+@if(visible){
+    @if(loading){
+        <div class="modal modal-open">
+            <div class="modal-box bg-[#23222f]">
+                <div class="flex items-center justify-center">
+                    <span class="loading loading-spinner loading-lg"></span>
+                </div>
+            </div>
+        </div>
+    } @else {
+    <div class="modal modal-open">
+      <div class="modal-box bg-[#23222f]">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" (click)="onConfirm()">✕</button>
+        </form>
+        <h3 class="font-bold text-2xl text-[#ebe9ed]">{{ this.media?.title }}</h3>
+        <div class="flex flex-col items-left justify-start">
+            <img [src]="this.media?.thumbnail" alt="{{ this.media?.title }}" class="w-56 h-auto rounded-md text-left my-2" />
+            <p>Description:</p>
+            <p class="text-[#ebe9ed]">{{ this.media?.description }}</p>
+            <div class="divider"></div>
+            <span>Read Full:
+            <a href="{{ this.media?.url }}" class="link link-accent">{{ this.media?.title }}</a></span>
+            <div class="divider"></div>
+            <div class="overflow-hidden whitespace-pre-wrap">Games Metioned: 
+                @for (game of media?.games; track game) {
+                    <a href="game/{{game.id}}" class="badge text-[#ebe9ed] mr-1 items-center">{{game.name}}</a>
+                }
+                </div>
+        </div>
+      </div>
+    </div>
+    }
+}

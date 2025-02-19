@@ -1,0 +1,35 @@
+<div class="flex flex-wrap">
+    @for (tag of selectedTags; track tag) {
+        <span class="badge text-[#ebe9ed] mb-2 mr-1">{{tag.name}} </span>
+    }
+  </div>
+  <input
+    type="text"
+    class="input input-bordered bg-[#353347] border-[#ebe9ed] w-1/2"
+    placeholder="Select up to 5 tags..."
+    [formControl]="searchControl"
+    (focus)="showDropdown = true"
+    (click)="showDropdown = true"
+  />
+  @if (showDropdown) {
+    <ul
+      class="menu bg-[#353347] border-[#ebe9ed] w-1/2 absolute z-10 shadow-lg max-h-60 overflow-auto"
+      (mousedown)="$event.preventDefault()"
+    >
+    @for (tag of filteredTags; track tag) {
+      <li class="cursor-pointer">
+        <label class="flex items-center">
+          <input
+            type="checkbox"
+            class="checkbox"
+            [checked]="isSelected(tag.id)"
+            (change)="selectTag(tag.id)"
+            [disabled]="isDisabled(tag.id)"
+          />
+          <span class="ml-2">{{ tag.name }}</span>
+        </label>
+      </li>
+    }
+    </ul>
+}
+  

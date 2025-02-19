@@ -1,0 +1,159 @@
+<div class="flex w-full max-w-7xl relative mx-auto mt-4">
+    <div class="breadcrumbs text-sm py-2">
+        <ul class="flex">
+            @if (game?.developerId === userService.user()?.id) {
+            <li><a href="games">Games</a></li>
+            } @if (game?.developerId !== userService.user()?.id) {
+            <li><a href="user">{{ game?.developerName }}</a></li>
+            }
+            <li>{{ game?.name }}</li>
+        </ul>
+    </div>
+</div>
+
+<div class="flex flex-col w-full">
+    <div class="card w-full max-w-7xl bg-[#353347] shadow-xl mx-auto mb-4 p-4">
+        <div class="flex flex-row items-center">
+            <div class="flex flex-col w-[250px] h-[116px]">
+                @if (game?.coverPhoto) {
+                <img src="{{ game?.coverPhoto }}" lazyload class="rounded-lg shadow-2xl w-[250px] h-[116px] ml-1" />
+                } @if (!game?.coverPhoto) {
+                <div class="w-[250px] h-[116px] rounded-lg shadow-2xl ml-1 text-center content-center bg-black">
+                    no game cover set
+                </div>
+                }
+            </div>
+            <div class="ml-4 text-left">
+                <h1 class="text-3xl font-bold text-[#ebe9ed] w-[600px] overflow-hidden whitespace-nowrap">
+                    {{ game?.name }}
+                </h1>
+                <h2 class="text-xl">
+                    Release Date:
+                    <span class="text-[#ebe9ed]">{{ game?.releaseDate }}</span>
+                </h2>
+                <div>
+                    Tags: @for (tag of game?.tags; track tag) {
+                    <span class="badge text-[#ebe9ed] mr-1">{{ tag.name }}</span>
+                    }
+                </div>
+            </div>
+            @if (userService.user()?.id === game?.developerId) {
+            <div class="ml-auto">
+                <button class="btn btn-outline btn-info mr-3 font-roboto font-medium"  (click)="redirector(this.game!.id, '/edit-game/')">
+                    Edit
+                </button>
+                <button class="btn btn-outline btn-success mr-3 font-roboto font-medium"  (click)="redirector(this.game!.id, '/manage-keys/')">
+                    Manage Keys
+                </button>
+                <button class="btn btn-outline btn-error mr-3 font-roboto font-medium" (click)="this.deleteGame()">
+                    Delete
+                </button>
+            </div>
+            }
+        </div>
+    </div>
+
+    <div class="flex flex-row justify-center max-w-7xl w-full mx-auto">
+        <div class="card w-2/3 bg-[#353347] shadow-xl mb-10 p-4 mr-4">
+            @if (game?.screenshots || game?.youtubeTrailer) {
+            <h1 class="text-3xl font-bold text-[#ebe9ed] mb-2">Media</h1>
+            <div class="mb-4" *ngIf="selectedMedia">
+                <ng-container [ngSwitch]="selectedMedia.type">
+                    <ng-container *ngSwitchCase="'image'">
+                        <img [src]="selectedMedia.source" class="rounded-lg w-[800px] h-[450px]" />
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'video'">
+                        <youtube-player [videoId]="selectedMedia.source" [width]="800" [height]="450"
+                            placeholderImageQuality="high"></youtube-player>
+                    </ng-container>
+                </ng-container>
+            </div>
+            <div class="mt-2 overflow-x-scroll space-x-2 whitespace-nowrap">
+                @if (videoId) {
+                <button (click)="onMediaClick({ type: 'video', source: videoId })">
+                    <img [src]="getVideoCoverUrl(videoId)" lazyload class="rounded-lg w-[200px] h-[113px] ml-1" />
+                </button>
+                } @for (screenshot of game?.screenshots; track screenshot) {
+                <button (click)="
+                        onMediaClick({ type: 'image', source: screenshot.screenshot })">
+                    <img [src]="screenshot.screenshot" lazyload class="rounded-lg w-[200px] h-[113px] ml-1" />
+                </button>
+                }
+            </div>
+            <div class="divider"></div>
+            }
+            <h1 class="text-3xl font-bold text-[#ebe9ed]">Description</h1>
+            @if (game?.description) {
+            <markdown ngPreserveWhitespaces [inline]="true">{{
+                game?.description
+                }}</markdown>
+            }
+        </div>
+
+        <div class="flex flex-col items-center w-1/3">
+            <div class="card w-full bg-[#353347] shadow-xl mb-4 p-4 h-auto">
+                <h3 class="text-xl font-bold text-[#ebe9ed] mb-2">
+                    Developed by {{ game?.developerName }}
+                </h3>
+                <div class="divider"></div>
+                <a class="btn btn-outline w-full flex items-center text-lg text-[#ebe9ed] mb-2" href="/profile/{{this.game?.developerName}}">
+                    <ng-icon name="bootstrapPersonFill" class="mr-2"></ng-icon>Visit Developer Page
+                </a>
+                <a class="btn btn-outline w-full flex items-center text-lg text-[#ebe9ed]" href="/messages/{{ game?.developerId }}">
+                    <ng-icon name="bootstrapEnvelopeFill" class="mr-2"></ng-icon>Message Developer
+                </a>
+                @if (game?.youtubeTag) {
+                <div class="divider"></div>
+                <div class="tooltip"
+                    data-tip="When making videos about this game be sure to include it in your video tags">
+                    <h3 class="text-lg text-red-400 text-left">
+                        <ng-icon name="bootstrapYoutube" class="mr-2"></ng-icon>Youtube Tag:
+                        <br />
+                        <div class="text-[#ebe9ed]">{{ game?.youtubeTag }}</div>
+                    </h3>
+                </div>
+                } @if (game?.twitchTagName) {
+                <div class="divider"></div>
+                <div class="tooltip" data-tip="When streaming this game be sure to change category to provided here">
+                    <h3 class="text-lg text-purple-400 text-left">
+                        <ng-icon name="bootstrapTwitch" class="mr-2"></ng-icon>Twitch
+                        Category: <br />
+                        <div class="text-[#ebe9ed]">{{ game?.twitchTagName }}</div>
+                    </h3>
+                </div>
+                } @if (game?.pressKit) {
+                <div class="divider"></div>
+                <a class="btn btn-outline w-full flex items-center text-lg text-[#ebe9ed]" href="{{ game?.pressKit }}"
+                    target="_blank">
+                    <ng-icon name="bootstrapNewspaper" class="mr-2"></ng-icon>Press Kit
+                </a>
+                }
+            </div>
+
+            <div class="card w-full max-w-7xl bg-[#353347] shadow-xl mb-1 p-4 h-auto">
+                <h3 class="text-xl font-bold text-[#ebe9ed]">
+                    Additional Informations
+                </h3>
+                <div class="divider"></div>
+                @if (game?.minimumCPU) {
+                <span>Minimum CPU: <span class="text-[#ebe9ed]">{{ game?.minimumCPU }}</span></span>
+                <br />
+                } @if (game?.minimumRAM) {
+                <span>Minimum RAM: <span class="text-[#ebe9ed]">{{ game?.minimumRAM }}</span></span>
+                <br />
+                } @if (game?.minimumGPU) {
+                <span>Minimum GPU: <span class="text-[#ebe9ed]">{{ game?.minimumGPU }}</span></span>
+                <br />
+                } @if (game?.minimumStorage) {
+                <span>
+                    Minimum Storage: <span class="text-[#ebe9ed]">{{ game?.minimumStorage }}</span>
+                </span>
+                <br />
+                } @if (game?.minimumOS) {
+                <span>Minimum OS: <span class="text-[#ebe9ed]">{{ game?.minimumOS }}</span></span>
+                <br />
+                }
+            </div>
+        </div>
+    </div>
+</div>

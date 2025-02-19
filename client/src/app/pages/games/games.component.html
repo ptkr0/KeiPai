@@ -1,0 +1,18 @@
+<app-dev-navigation></app-dev-navigation>
+
+<div class="text-center flex flex-col items-center">
+    <div class="tooltip" data-tip="You can have up to 100 games added">
+        <div class="text-xl m-2 text-center">Games Added: {{pagination?.totalCount}}/100</div>
+    </div>
+    <button class="bg-blue-500 rounded-full p-4 shadow text-xl font-medium text-white hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed w-[1000px]" (click)="redirectToAddGame()" [disabled]="blockAddGameButton()">Add New Game</button>
+</div>
+
+<div class="flex flex-col items-center justify-center my-4">
+    <div class="flex flex-col items-center">
+        @for(game of games; track game)
+        {
+            <app-game (deleteGameEvent)="deleteGame($event)" [game]="game"></app-game>
+        }
+    </div>
+</div>
+

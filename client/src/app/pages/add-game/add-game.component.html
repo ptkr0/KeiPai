@@ -1,0 +1,310 @@
+<div class="flex w-full max-w-6xl relative mx-auto mt-4">
+  <div class="breadcrumbs text-sm py-2">
+    <ul class="flex">
+      <li><a href="games">Games</a></li>
+      <li>Add Game</li>
+    </ul>
+  </div>
+</div>
+
+<div class="card w-full max-w-6xl bg-[#353347] shadow-xl mx-auto mb-10">
+  <div class="card-body">
+    <form [formGroup]="addGameForm" (ngSubmit)="onSubmit()">
+      <div class="form-control mb-2">
+        <label class="label" for="name">
+          <span class="label-text text-xl text-[#ebe9ed]">Game Title*</span>
+        </label>
+        <input type="text" id="name" placeholder="Type your game title here" formControlName="name"
+          class="input input-bordered bg-[#353347] border-[#ebe9ed] w-1/2" [ngClass]="{
+            'input-error':
+              (addGameForm.get('name')?.hasError('required') || addGameForm.get('name')?.hasError('maxlength')) &&
+              addGameForm.get('name')?.touched,
+            'input-success': addGameForm.get('name')?.valid
+          }" />
+        <label class="label">
+          <span class="label-text-alt text-error">
+            @if(addGameForm.get('name')?.hasError('required') &&
+            addGameForm.get('name')?.touched) { Game title is required. }
+            @if(addGameForm.get('name')?.hasError('maxlength') &&
+            addGameForm.get('name')?.touched) { Character limit reached. }
+          </span>
+        </label>
+      </div>
+
+      <div class="divider"></div>
+      <label class="label" for="description">
+        <span class="label-text text-xl text-[#ebe9ed] w-full flex justify-between">
+          <span>Game Description*</span>
+          <span>{{ this.descLength }}/5000</span>
+        </span>
+      </label>
+      <div class="NgxEditor__Wrapper">
+        <ngx-editor-menu [editor]="editor" [toolbar]="toolbar">
+        </ngx-editor-menu>
+        <ngx-editor [editor]="editor" formControlName="editorContent" (ngModelChange)="onContentChange()"></ngx-editor>
+      </div>
+      <label class="label">
+        <span class="label-text-alt text-error">
+          @if(addGameForm.get('editorContent')?.hasError('maxlength') &&
+          addGameForm.get('editorContent')?.touched) { Character limit reached.
+          } @if(addGameForm.get('editorContent')?.hasError('required') &&
+          addGameForm.get('editorContent')?.touched) { Game Description is
+          required. }
+        </span>
+      </label>
+
+      <div class="divider"></div>
+      <div class="form-control mb-2">
+        <label class="label" for="youtubeUrl">
+          <span class="label-text text-xl text-[#ebe9ed]">Youtube Trailer</span>
+        </label>
+
+        <div class="flex items-start space-x-4">
+          <input type="text" id="youtubeUrl" placeholder="Enter valid Youtube link" formControlName="youtubeUrl"
+            class="input input-bordered bg-[#353347] border-[#ebe9ed] w-1/2 mr-5" (input)="onUrlInput()" />
+
+          @if(thumbnailUrl) {
+          <img [src]="thumbnailUrl" class="w-[300px] h-auto rounded-lg" />
+          }
+        </div>
+        <label class="label">
+          <span class="label-text-alt text-error">
+            @if(addGameForm.get('youtubeUrl')?.hasError('pattern') &&
+            addGameForm.get('youtubeUrl')?.touched) { Must be a valid youtube
+            link. }
+          </span>
+        </label>
+      </div>
+
+      <div class="divider"></div>
+      <div class="form-control mb-2">
+        <label class="label" for="releaseDate">
+          <span class="label-text text-xl text-[#ebe9ed]">Release Date*</span>
+        </label>
+        <input type="date" id="releaseDate" formControlName="releaseDate"
+          class="input input-bordered w-1/2 h-12 bg-[#353347] border-[#ebe9ed] rounded-lg focus:outline-none focus:ring-2"
+          [ngClass]="{
+            'input-error':
+              addGameForm.get('releaseDate')?.hasError('required') &&
+              addGameForm.get('releaseDate')?.touched,
+            'input-success': addGameForm.get('releaseDate')?.valid
+          }" />
+        <label class="label">
+          <span class="label-text-alt text-error">
+            @if(addGameForm.get('releaseDate')?.hasError('required') &&
+            addGameForm.get('releaseDate')?.touched) { Release Date is required.
+            }
+          </span>
+        </label>
+      </div>
+
+      <div class="divider"></div>
+      <div class="form-control mb-2">
+        <label class="label" for="cover">
+          <span>
+            <span class="label-text text-xl text-[#ebe9ed]">Game Cover*</span><br />
+            <span class="label-text text-sm text-[#ebe9ed]">Maximum file size is 1MB. We recommend using game cover from
+              Steam</span>
+          </span>
+        </label>
+        <input type="file" id="cover" class="file-input file-input-bordered w-1/2 bg-[#353347] border-[#ebe9ed]"
+          accept="image/jpeg, image/png, image/webp" (change)="onFileChange($event)" />
+        <label class="label" for="cover">
+          <span class="label-text-alt text-error">
+            @if(addGameForm.get('cover')?.hasError('required') &&
+            addGameForm.get('cover')?.touched) { File is required. }
+            @if(addGameForm.get('cover')?.hasError('invalidType')) { Only image
+            files are allowed. }
+            @if(addGameForm.get('cover')?.hasError('maxSize')) { File size
+            should be less than 1MB. }
+          </span>
+        </label>
+      </div>
+
+      <div class="divider"></div>
+      <div class="form-control mb-2">
+        <label class="label">
+          <span>
+            <span class="label-text text-xl text-[#ebe9ed]">Tags</span><br />
+            <span class="label-text text-sm text-[#ebe9ed]">Select up to 5 tags that best represent your game</span>
+          </span>
+        </label>
+        <div class="relative">
+          <app-tag-select formControlName="tags"></app-tag-select>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="form-control mb-2">
+        <label class="label" for="youtubeTag">
+          <span>
+            <span class="label-text text-xl text-[#ebe9ed]">Youtube Tag</span><br />
+            <span class="label-text text-sm text-[#ebe9ed]">If you want users to submit Youtube videos you have to add a
+              Youtube tag</span>
+          </span>
+        </label>
+        <input type="text" id="youtubeTag" placeholder="Youtube tag should be unique for your game"
+          formControlName="youtubeTag" class="input input-bordered bg-[#353347] border-[#ebe9ed] w-1/2" [ngClass]="{
+            'input-error':
+              addGameForm.get('youtubeTag')?.hasError('maxlength') &&
+              addGameForm.get('youtubeTag')?.touched,
+            'input-success': addGameForm.get('youtubeTag')?.valid
+          }" />
+        <label class="label" for="youtubeTag">
+          <span class="label-text-alt text-error">
+            @if(addGameForm.get('youtubeTag')?.hasError('maxlength') &&
+            addGameForm.get('youtubeTag')?.touched) { Character limit reached. }
+          </span>
+        </label>
+      </div>
+
+      <div class="divider"></div>
+      <div class="form-control mb-2">
+        <label class="label">
+          <span>
+            <span class="label-text text-xl text-[#ebe9ed]">Twitch Category</span><br />
+            <span class="label-text text-sm text-[#ebe9ed]">If you want users to submit their Twitch livestreams you
+              need to
+              set category for your game</span><br />
+            <span class="label-text text-sm text-[#ebe9ed]">Twitch uses
+              <a class="link link-accent" href="https://www.igdb.com/">IGDB</a>
+              as their game database.
+              <a class="link link-accent" href="https://www.igdb.com/games/new">Learn how to add your game to
+                IGDB.</a></span>
+          </span>
+        </label>
+        <div class="relative">
+          <app-game-search formControlName="twitchCategory"></app-game-search>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="form-control mb-2">
+        <label class="label" for="pressKit">
+          <span class="label-text text-xl text-[#ebe9ed]">Press kit URL</span>
+        </label>
+        <input type="text" id="pressKit" placeholder="URL for your game's press kit"
+          formControlName="pressKit" class="input input-bordered bg-[#353347] border-[#ebe9ed] w-1/2" [ngClass]="{
+            'input-error':
+              addGameForm.get('pressKit')?.hasError('maxlength') &&
+              addGameForm.get('pressKit')?.touched,
+            'input-success': addGameForm.get('pressKit')?.valid
+          }" />
+        <label class="label">
+          <span class="label-text-alt text-error">
+            @if(addGameForm.get('pressKit')?.hasError('maxlength') &&
+            addGameForm.get('pressKit')?.touched) { Character limit reached. }
+            @if(addGameForm.get('pressKit')?.hasError('pattern') &&
+            addGameForm.get('pressKit')?.touched) { Provide a valid URL. }
+          </span>
+        </label>
+      </div>
+
+      <div class="divider"></div>
+      <div class="form-control mb-2">
+        <label class="label" for="minimumCPU">
+          <span class="label-text text-xl text-[#ebe9ed]">Minimum CPU Requirement</span>
+        </label>
+        <input type="text" id="minimumCPU" placeholder="If you want to specify minimum CPU requirement"
+          formControlName="minimumCPU" class="input input-bordered bg-[#353347] border-[#ebe9ed] w-1/2" [ngClass]="{
+            'input-error':
+              addGameForm.get('minimumCPU')?.hasError('maxlength') &&
+              addGameForm.get('minimumCPU')?.touched,
+            'input-success': addGameForm.get('minimumCPU')?.valid
+          }" />
+        <label class="label">
+          <span class="label-text-alt text-error">
+            @if(addGameForm.get('minimumCPU')?.hasError('maxlength') &&
+            addGameForm.get('minimumCPU')?.touched) { Character limit reached. }
+          </span>
+        </label>
+      </div>
+
+      <div class="divider"></div>
+      <div class="form-control mb-2">
+        <label class="label" for="minimumRAM">
+          <span class="label-text text-xl text-[#ebe9ed]">Minimum RAM Requirement</span>
+        </label>
+        <input type="text" id="minimumRAM" placeholder="If you want to specify minimum RAM requirement"
+          formControlName="minimumRAM" class="input input-bordered bg-[#353347] border-[#ebe9ed] w-1/2" [ngClass]="{
+            'input-error':
+              addGameForm.get('minimumRAM')?.hasError('maxlength') &&
+              addGameForm.get('minimumRAM')?.touched,
+            'input-success': addGameForm.get('minimumRAM')?.valid
+          }" />
+        <label class="label">
+          <span class="label-text-alt text-error">
+            @if(addGameForm.get('minimumRAM')?.hasError('maxlength') &&
+            addGameForm.get('minimumRAM')?.touched) { Character limit reached. }
+          </span>
+        </label>
+      </div>
+
+      <div class="divider"></div>
+      <div class="form-control mb-2">
+        <label class="label" for="minimumGPU">
+          <span class="label-text text-xl text-[#ebe9ed]">Minimum GPU Requirement</span>
+        </label>
+        <input type="text" id="minimumGPU" placeholder="If you want to specify minimum GPU requirement"
+          formControlName="minimumGPU" class="input input-bordered bg-[#353347] border-[#ebe9ed] w-1/2" [ngClass]="{
+            'input-error':
+              addGameForm.get('minimumGPU')?.hasError('maxlength') &&
+              addGameForm.get('minimumGPU')?.touched,
+            'input-success': addGameForm.get('minimumGPU')?.valid
+          }" />
+        <label class="label">
+          <span class="label-text-alt text-error">
+            @if(addGameForm.get('minimumGPU')?.hasError('maxlength') &&
+            addGameForm.get('minimumGPU')?.touched) { Character limit reached. }
+          </span>
+        </label>
+      </div>
+
+      <div class="divider"></div>
+      <div class="form-control mb-2">
+        <label class="label" for="minimumOS">
+          <span class="label-text text-xl text-[#ebe9ed]">Minimum OS Requirement</span>
+        </label>
+        <input type="text" id="minimumOS" placeholder="If you want to specify minimum OS requirement"
+          formControlName="minimumOS" class="input input-bordered bg-[#353347] border-[#ebe9ed] w-1/2" [ngClass]="{
+            'input-error':
+              addGameForm.get('minimumOS')?.hasError('maxlength') &&
+              addGameForm.get('minimumOS')?.touched,
+            'input-success': addGameForm.get('minimumOS')?.valid
+          }" />
+        <label class="label">
+          <span class="label-text-alt text-error">
+            @if(addGameForm.get('minimumOS')?.hasError('maxlength') &&
+            addGameForm.get('minimumOS')?.touched) { Character limit reached. }
+          </span>
+        </label>
+      </div>
+
+      <div class="divider"></div>
+      <div class="form-control mb-2">
+        <label class="label" for="minimumStorage">
+          <span class="label-text text-xl text-[#ebe9ed]">Minimum Storage Requirement</span>
+        </label>
+        <input type="text" id="minimumStorage" placeholder="If you want to specify minimum Storage requirement"
+          formControlName="minimumStorage" class="input input-bordered bg-[#353347] border-[#ebe9ed] w-1/2" [ngClass]="{
+            'input-error':
+              addGameForm.get('minimumStorage')?.hasError('maxlength') &&
+              addGameForm.get('minimumStorage')?.touched,
+            'input-success': addGameForm.get('minimumStorage')?.valid
+          }" />
+        <label class="label">
+          <span class="label-text-alt text-error">
+            @if(addGameForm.get('minimumStorage')?.hasError('maxlength') &&
+            addGameForm.get('minimumStorage')?.touched) { Character limit
+            reached. }
+          </span>
+        </label>
+      </div>
+      <button type="submit"
+        class="bg-blue-500 rounded-full p-4 shadow w-full text-xl font-medium text-white hover:bg-blue-700 disabled:bg-gray-600 disabled:text-black disabled:opacity-65 disabled:cursor-not-allowed"
+        [disabled]="addGameForm.invalid">
+        Add Game
+      </button>
+    </form>
+  </div>
+</div>

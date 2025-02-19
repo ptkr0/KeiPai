@@ -1,0 +1,25 @@
+<div class="card bg-[#353347] w-full h-[200px] max-h-[300px] my-2 flex flex-row items-start p-4">
+    @if (video.video.thumbnail !== "") {
+    <img
+      src="{{video.video.thumbnail}}"
+      lazyload
+      class="rounded-lg w-[250px] h-auto max-h-[150px] ml-3" />
+    }
+    @if (video.video.thumbnail === "") {
+      <div class="w-[250px] rounded-lg ml-3 text-center content-center bg-black">no game cover set</div>
+    }
+    <div class="ml-4 text-left flex flex-col h-full">
+        <a class="text-2xl font-bold w-[700px] text-ellipsis overflow-hidden whitespace-nowrap link link-accent" href="{{video.video.url}}" target="_blank">{{video.video.title}}</a>
+        <h2 class="text-md">Uploaded On: <span class="text-[#ebe9ed]">{{video.video.uploadDate | date}}</span></h2>
+        <h2 class="text-md">Views: <span class="text-[#ebe9ed]">{{video.video.viewCount}}</span></h2>
+        <h2 class="text-md">Description:</h2>
+        <p class="text-[#ebe9ed] text-ellipsis line-clamp-2">{{video.video.description}}</p>
+        @if (video.games.length > 0) {
+        <div class="overflow-hidden whitespace-pre-wrap w-[900px]">Games Mentioned: 
+            @for (game of video.games; track game) {
+              <a href="game/{{game.id}}" class="badge text-[#ebe9ed] mr-1 items-center">{{game.name}}</a>
+            }
+        </div>
+        }
+    </div>
+</div>

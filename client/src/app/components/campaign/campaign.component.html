@@ -1,0 +1,53 @@
+<button class="card bg-[#353347] w-full h-40 my-2 flex flex-row items-center hover:bg-[#4c4a63]" (click)="redirector(this.campaign!.id, '/campaign/')">
+    @if (campaign?.game?.coverPhoto !== "") {
+    <img
+      src="{{campaign?.game?.coverPhoto}}"
+      lazyload
+      class="rounded-lg w-[250px] h-[116px] ml-3" />
+    }
+    @if (campaign?.game?.coverPhoto === "") {
+      <div class="w-[250px] h-[116px] rounded-lg ml-3 text-center content-center bg-black">no game cover set</div>
+    }
+    <div class="ml-4 text-left">
+      <h1 class="text-3xl font-bold text-[#ebe9ed] w-[400px] text-ellipsis overflow-hidden whitespace-nowrap">{{campaign?.game!.name}}</h1>
+      <h2>Start Date: <span class="text-[#ebe9ed]">{{campaign?.startDate | date}}</span></h2>
+      @if (hasEnded()) {
+        <h2 class="text-red-500">This Campaign has ended</h2>
+      }
+      @else if (campaign?.endDate !== null) {  <h2>End Date: <span class="text-[#ebe9ed]">{{campaign?.endDate | date }}</span></h2> }
+      @else { <h2>End Date: <span class="text-[#ebe9ed]">No date set</span></h2> }
+      <div class="overflow-hidden whitespace-pre-wrap w-[470px]">Tags: 
+        @for (tag of campaign?.game?.tags; track tag) {
+          <span class="badge text-[#ebe9ed] mr-1 items-center">{{tag.name}}</span>
+        }
+      </div>
+      @if (!hasEnded()) {
+      <div class="overflow-hidden whitespace-pre-wrap w-[400px]">Platforms: 
+        @for (key of campaign?.keysLeftForCampaign; track key) {
+          @if(key.canBeRequested) {
+            <div class="tooltip" [attr.data-tip]="key.name">
+              <span class="text-[#ebe9ed] mr-1 items-center text-xl align-middle z-10"><ng-icon name="{{key.id | platformIcon}}"></ng-icon></span>
+            </div>
+            }
+            @else {
+            <div class="tooltip" data-tip="This platform is no longer available (either campaign run of out available keys or request limit was reached)">
+                <span class="text-[#ebe9ed] mr-1 items-center text-xl align-middle opacity-25"><ng-icon name="{{key.id | platformIcon}}"></ng-icon></span>
+            </div>
+        }
+      }
+        </div>
+      }
+    </div>
+    @if (campaign?.game?.developerId === this.userService.user()?.id) {
+    <div class="ml-auto">
+      <button class="btn btn-outline btn-success mr-3 font-roboto font-medium" (click)="redirector(this.campaign!.id, '/campaign-details/'); $event.stopPropagation()">View Stats</button>
+      @if (!hasEnded()) {
+      <button class="btn btn-outline btn-error mr-3 font-roboto font-medium" (click)="closeCampaign(); $event.stopPropagation()">Close</button>
+      }
+    </div>
+    }
+    @if (this.userService.user()?.role === 'Influencer') {
+        <button class="btn btn-outline btn-info font-roboto font-medium w-40 ml-auto mr-4" (click)="redirector(this.campaign!.id, '/campaign/'); $event.stopPropagation()" [disabled]="campaign?.didJoin">Request Key</button>
+    }
+</button>
+  

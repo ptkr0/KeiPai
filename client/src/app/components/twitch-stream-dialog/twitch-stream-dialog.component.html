@@ -1,0 +1,33 @@
+@if(visible){
+    @if(loading){
+        <div class="modal modal-open">
+            <div class="modal-box bg-[#23222f]">
+                <div class="flex items-center justify-center">
+                    <span class="loading loading-spinner loading-lg"></span>
+                </div>
+            </div>
+        </div>
+    } @else {
+    <div class="modal modal-open">
+      <div class="modal-box bg-[#23222f]">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" (click)="onConfirm()">✕</button>
+        </form>
+        <h3 class="font-bold text-2xl text-[#ebe9ed]">{{ this.stream?.stream?.title }}</h3>
+        <div class="flex flex-col items-left justify-start">
+        <img [src]="this.getProperThumbnailUrl()" alt="{{ this.stream?.stream?.title }}" class="w-56 h-auto rounded-md text-left my-2"/>
+          <span>Stream Date: <span class="text-[#ebe9ed]">{{this.stream?.stream?.startDate | date}}</span></span>
+          <span>Stream Duration: <span class="text-[#ebe9ed]">{{this.getStreamDuration()}}</span></span>
+          <span>Average Viewers: <span class="text-[#ebe9ed]">{{this.stream?.stream?.averageViewers}}</span></span>
+          <span>Peak Viewers: <span class="text-[#ebe9ed]">{{this.stream?.stream?.peakViewers}}</span></span>
+            <div class="divider"></div>
+            <div class="overflow-hidden whitespace-pre-wrap">Games Metioned: 
+                @for (game of stream?.games; track game) {
+                    <a href="game/{{game.id}}" class="badge text-[#ebe9ed] mr-1 items-center">{{game.name}}</a>
+                }
+                </div>
+        </div>
+      </div>
+    </div>
+    }
+  }

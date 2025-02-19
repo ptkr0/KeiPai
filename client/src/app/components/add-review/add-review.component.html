@@ -1,0 +1,103 @@
+@if(visible){
+  @if(loading){
+      <div class="modal modal-open">
+          <div class="modal-box bg-[#23222f]">
+              <div class="flex items-center justify-center">
+                  <span class="loading loading-spinner loading-lg"></span>
+              </div>
+          </div>
+      </div>
+  } @else {
+    <div class="modal modal-open">
+      <div class="modal-box bg-[#23222f] text-[#ebe9ed]">
+        <h3 class="modal-top font-bold text-xl">Submit Review</h3>
+        <div class="modal-content">
+          <form [formGroup]="reviewForm" (ngSubmit)="onSubmit()">
+            <div class="form-control">
+              <div class="label">
+                  <span class="label-text">Rate Your Experience With Influencer</span>
+              </div>
+              <div class="rating rating-lg items-center align-middle">
+                <input
+                  type="radio"
+                  name="rating"
+                  [value]="1"
+                  formControlName="rating"
+                  class="mask mask-star bg-orange-400"
+                  (change)="onRatingChange(1)"
+                  [checked]="reviewForm.get('rating')?.value === 1"
+                />
+                <input
+                  type="radio"
+                  name="rating"
+                  [value]="2"
+                  formControlName="rating"
+                  class="mask mask-star bg-orange-400"
+                  (change)="onRatingChange(2)"
+                  [checked]="reviewForm.get('rating')?.value === 2"
+                />
+                <input
+                  type="radio"
+                  name="rating"
+                  [value]="3"
+                  formControlName="rating"
+                  class="mask mask-star bg-orange-400"
+                  (change)="onRatingChange(3)"
+                  [checked]="reviewForm.get('rating')?.value === 3"
+                />
+                <input
+                  type="radio"
+                  name="rating"
+                  [value]="4"
+                  formControlName="rating"
+                  class="mask mask-star bg-orange-400"
+                  (change)="onRatingChange(4)"
+                  [checked]="reviewForm.get('rating')?.value === 4"
+                />
+                <input
+                  type="radio"
+                  name="rating"
+                  [value]="5"
+                  formControlName="rating"
+                  class="mask mask-star bg-orange-400"
+                  (change)="onRatingChange(5)"
+                  [checked]="reviewForm.get('rating')?.value === 5"
+                />
+                <div class="ml-4 italic">{{ note }}</div>
+              </div>
+              
+            </div>
+            <div div="form-control">
+                <div class="label mt-2">
+                  <span class="label-text">Add Comment (Optional)</span>
+                </div>
+                <textarea
+                  id="comment"
+                  formControlName="comment"
+                  class="form-control textarea w-full overflow-y-scroll border-[#ebe9ed] bg-[#23222f]"
+                  rows="5"
+                  placeholder="How did you find this influencer?"
+                ></textarea>
+            </div>
+            <div class="divider"></div>
+              <div class="form-control">
+                <label class="label cursor-pointer">
+                    <span class="label-text">I want my review to be Anonymous</span>
+                  <input type="checkbox" class="checkbox" formControlName="isAnonymous" id="isAnonymous" />
+                </label>
+              </div>
+            <div class="modal-action">
+              @if (this.userWasRated) {
+                <button class="btn btn-error" type="button" (click)="deleteReview()">Delete Review</button>
+              }
+              <button class="btn btn-primary" type="button" (click)="onCancel()">Cancel</button>
+              <button class="btn btn-success" [disabled]="this.reviewForm.invalid" type="submit">
+                Submit Review
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    }
+}

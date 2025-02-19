@@ -1,0 +1,72 @@
+<div class="card w-full max-w-md bg-[#353347] shadow-xl mx-auto mt-10">
+  <div class="card-body">
+    <h2 class="card-title text-[#ebe9ed] text-center">Login here</h2>
+    <h5 class="card-normal text-[#ebe9ed]">No matter if you are a developer or an influencer</h5>
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
+      autocomplete="off"
+      novalidate
+    >
+      <div class="form-control mb-2">
+        <label class="label" for="email">
+          <span class="label-text text-[#ebe9ed]">Email Address</span>
+        </label>
+        <input
+          type="text"
+          id="email"
+          placeholder="Email Address"
+          formControlName="email"
+          class="input input-bordered bg-[#353347] border-[#ebe9ed] w-full"
+          [ngClass]="{
+            'input-error':
+              loginForm.get('email')?.hasError('required') &&
+              loginForm.get('email')?.touched,
+            'input-success': loginForm.get('email')?.valid
+          }"
+        />
+        <label class="label">
+          <span class="label-text-alt text-error">
+            @if(loginForm.get('email')?.hasError('required') &&
+            loginForm.get('email')?.touched) { Email Address is required. }
+          </span>
+        </label>
+      </div>
+
+      <div class="form-control mb-4">
+        <label class="label" for="password">
+          <span class="label-text text-[#ebe9ed]">Password</span>
+        </label>
+        <input
+          type="password"
+          id="password"
+          placeholder="Password"
+          formControlName="password"
+          class="input input-bordered bg-[#353347] border-[#ebe9ed] w-full"
+          [ngClass]="{
+            'input-error':
+              loginForm.get('password')?.hasError('required') &&
+              loginForm.get('password')?.touched,
+            'input-success': loginForm.get('password')?.valid
+          }"
+        />
+        <label class="label">
+          <span class="label-text-alt text-error">
+            @if(loginForm.get('password')?.hasError('required') &&
+            loginForm.get('password')?.touched) { Password is required. }
+            @if(loginForm.get('password')?.hasError('invalid') &&
+            loginForm.get('password')?.touched) { Invalid e-mail or password }
+          </span>
+        </label>
+      </div>
+      <button
+        type="submit"
+        class="btn btn-primary text-white w-full"
+        [disabled]="loginForm.invalid"
+      >
+        Login
+      </button>
+    </form>
+    <div class="text-center">Don't have an account yet? <a class="link link-accent" onclick="select_register.showModal()">Register now!</a></div>
+  </div>
+</div>

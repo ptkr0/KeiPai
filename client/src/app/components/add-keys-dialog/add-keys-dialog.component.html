@@ -1,0 +1,47 @@
+@if(visible) {
+<div class="modal modal-open">
+  <div class="modal-box bg-[#23222f] text-[#ebe9ed]">
+    <h3 class="modal-top font-bold text-xl">Add Keys</h3>
+    <div class="modal-content">
+      <form [formGroup]="addKeysForm" (ngSubmit)="onSubmit()">
+        <label div="form-control my-2">
+          <div class="label">
+            <span class="label-text">Platform</span>
+          </div>
+          <select
+            id="platform"
+            formControlName="platform"
+            class="select bg-[#23222f] border-[#ebe9ed] w-full"
+          >
+            <option value="" disabled selected>Select platform</option>
+            @for(platform of platforms; track platform) {
+            <option value="{{ platform.id }}">{{ platform.name }}</option>
+            }
+          </select></label
+        >
+        <div class="divider"></div>
+        <label div="form-control">
+          <div class="label">
+            <span class="label-text">Keys detected: {{ this.numOfKeys }}</span>
+          </div>
+          <textarea
+            id="keys"
+            formControlName="keys"
+            class="form-control textarea w-full overflow-y-scroll border-[#ebe9ed] bg-[#23222f]"
+            rows="5"
+            placeholder="Enter each key in new line"
+            required
+            (input)="onKeysChange($event)"
+          ></textarea>
+        </label>
+        <div class="modal-action">
+          <button class="btn btn-primary" (click)="onCancel()">Cancel</button>
+          <button class="btn btn-success" [disabled]="this.addKeysForm.invalid" type="submit">
+            Add Keys
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+}

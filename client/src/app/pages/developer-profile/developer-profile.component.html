@@ -1,0 +1,95 @@
+<div class="flex w-full max-w-6xl relative mx-auto mt-4">
+  <div class="breadcrumbs text-sm py-2">
+      <ul class="flex">
+          <li><a href="campaigns">Home</a></li>
+          <li><a href="profile/{{ this.profile?.developer?.username }}">{{ this.profile?.developer?.username }}</a></li>
+      </ul>
+  </div>
+</div>
+
+<div class="card bg-[#353347] max-w-6xl w-full mx-auto">
+    <div class="card-body px-8">
+      <div class="flex justify-between items-start">
+        <div class="flex-grow">
+          <div class="text-3xl text-[#ebe9ed] mb-2">{{ this.profile?.developer?.username }}</div>
+          <div>Games Added: <span class="text-[#ebe9ed]">{{ this.profile?.gamesAdded }}</span></div>
+          <div>Campaigns Created: <span class="text-[#ebe9ed]">{{ this.profile?.campaignsCreated }}</span></div>
+          @if (this.profile?.developer?.contactEmail !== "" && this.profile?.developer?.contactEmail !== null)
+          {
+            <div>Contact e-mail:
+              <a href="mailto:{{ this.profile?.developer?.contactEmail }}" class="link link-accent">{{ this.profile?.developer?.contactEmail }}</a>
+            </div>
+          }
+          @if (this.profile?.developer?.websiteUrl !== "" && this.profile?.developer?.websiteUrl !== null)
+          {
+            <div>Website:
+              <a href="{{ this.profile?.developer?.websiteUrl }}" target="_blank" class="link link-accent">{{ this.profile?.developer?.websiteUrl }}</a>
+            </div>
+          }
+          @if (this.profile?.developer?.about !== "" && this.profile?.developer?.about !== null)
+          {
+            <div>About:
+              <div class="text-[#ebe9ed]">{{ this.profile?.developer?.about }}</div>
+            </div>
+          }
+        </div>
+        @if (this.profile?.developer?.id !== this.userService.user()?.id)
+        {
+          <div class="flex flex-col space-y-2 flex-shrink-0 w-48">
+            <a class="flex flex-row btn btn-outline items-center text-md text-[#ebe9ed]" href="messages/{{this.profile?.developer?.id}}">
+              <ng-icon name="bootstrapEnvelopeFill" class="mr-2"></ng-icon>Message Developer
+            </a>
+            <a class="flex flex-row btn btn-outline btn-error items-center text-md">
+              <ng-icon name="bootstrapExclamationCircle" class="mr-2"></ng-icon>Report Developer
+            </a>
+          </div>
+        }
+        @else if (this.profile?.developer?.id === this.userService.user()?.id)
+        {
+          <div class="flex flex-col space-y-2 flex-shrink-0 w-48">
+            <a class="flex flex-row btn btn-outline items-center text-md text-[#ebe9ed]" href="settings">
+              <ng-icon name="bootstrapGearFill" class="mr-2"></ng-icon>Edit Profile
+            </a>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="card bg-[#353347] max-w-6xl w-full mx-auto m-4">
+    <div class="card-body items-center">
+      <div>
+        <button class="btn btn-wide mx-4 btn-warning rounded-full shadow-md transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg" (click)="selectTab('games')">
+          <ng-icon name="bootstrapListCheck" size="30px" class="mr-2"></ng-icon>Games
+        </button>
+
+        <button class="btn btn-wide mx-4 btn-info rounded-full shadow-md transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg" (click)="selectTab('campaigns')">
+          <ng-icon name="bootstrapGraphUp" size="30px" class="mr-2"></ng-icon>Active Campaigns
+        </button>
+      </div>
+    </div>
+  </div>
+
+  @if(selectedTab === 'games') {
+  <div class="flex flex-col items-center max-w-6xl w-full mx-auto my-4">
+    <div class="items-start text-left text-3xl text-[#ebe9ed] self-start">Games by {{this.profile?.developer?.username}}</div>
+      <div class="flex flex-col items-center w-full">
+          @for(game of games; track game)
+          {
+              <app-game class="w-full" [game]="game"></app-game>
+          }
+      </div>
+  </div>
+  }
+
+  @if(selectedTab === 'campaigns') {
+    <div class="flex flex-col items-center max-w-6xl w-full mx-auto my-4">
+      <div class="items-start text-left text-3xl text-[#ebe9ed] self-start">Active Campaigns by {{this.profile?.developer?.username}}</div>
+        <div class="flex flex-col items-center w-full">
+            @for(campaign of campaigns; track campaign)
+            {
+                <app-campaign class="w-full" [campaign]="campaign"></app-campaign>
+            }
+        </div>
+    </div>
+    }

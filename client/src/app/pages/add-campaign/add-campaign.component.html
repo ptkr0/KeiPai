@@ -1,0 +1,263 @@
+<div class="flex w-full max-w-6xl relative mx-auto mt-4">
+    <div class="breadcrumbs text-sm py-2">
+      <ul class="flex">
+        <li><a href="campaigns">Campaigns</a></li>
+        <li>Add Campaign</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card w-full max-w-6xl bg-[#353347] shadow-xl mx-auto mb-10">
+    <div class="card-body">
+        <form [formGroup]="addCampaignForm" (ngSubmit)="onSubmit()">
+            <div class="form-control mb-2">
+                <label class="label" for="game">
+                    <span>
+                        <p class="label-text text-xl text-[#ebe9ed]">1. Select Game you want to start campaign for</p>
+                        <p class="label-text text-sm text-[#ebe9ed] mb-1">If you don't see your game you might have already reached campaign limit for it</p>
+                    </span>
+                </label>
+                <app-add-campaign-search-game id="game" (setGameEvent)="setGame($event)"></app-add-campaign-search-game>
+            </div>
+            <div class="divider"></div>
+            @if (selectedGame) {
+            <div class="flex flex-row mb-2">
+                @if (selectedGame.coverPhoto !== "") {
+                <img src="{{selectedGame.coverPhoto}}" lazyload class="rounded-lg shadow-2xl w-[250px] h-[116px] ml-3" />
+                }
+                @if (selectedGame.coverPhoto === "") {
+                <div class="w-[250px] h-[116px] rounded-lg shadow-2xl ml-3 text-center content-center bg-black">no game cover set
+                </div>
+                }
+                <div class="ml-4 text-left">
+                    <h1 class="text-3xl font-bold text-[#ebe9ed]">
+                        {{selectedGame.name}}</h1>
+                    <h2 class="text-xl">Release Date: <span class="text-[#ebe9ed]">{{selectedGame.releaseDate}}</span></h2>
+                    @if (selectedGame.youtubeTag) {
+                        <span class="text-left">
+                            <div class="flex items-center text-xl text-red-400">
+                                <ng-icon name="bootstrapYoutube" class="mr-2"></ng-icon>
+                                <div class="text-lg text-[#ebe9ed]">This game can track Influencers using Youtube.</div>
+                            </div>
+                        </span>
+                    }
+                    @if (!selectedGame.youtubeTag) {
+                        <span class="text-left">
+                            <div class="flex items-center text-xl text-red-400">
+                                <ng-icon name="bootstrapYoutube" class="mr-2"></ng-icon>
+                                <div class="text-lg text-[#ebe9ed]">This game cannot track Influencers using Youtube. You can add Youtube tag <a class="link link-accent" href="/edit-game/{{selectedGame.id}}">here</a></div>
+                            </div>
+                        </span>
+                    }
+                    @if (selectedGame.twitchTagId && selectedGame.twitchTagName) {
+                        <span class="text-left">
+                            <div class="flex items-center text-xl text-purple-400">
+                                <ng-icon name="bootstrapTwitch" class="mr-2"></ng-icon>
+                                <div class="text-lg text-[#ebe9ed]">This game can track Influencers using Twitch.</div>
+                            </div>
+                        </span>
+                    }
+                    @if (!selectedGame.twitchTagId && !selectedGame.twitchTagName) {
+                        <span class="text-left">
+                            <div class="flex items-center text-xl text-purple-400">
+                                <ng-icon name="bootstrapTwitch" class="mr-2"></ng-icon>
+                                <div class="text-lg text-[#ebe9ed]">This game cannot track Influencers using Twitch. You can add Twitch category <a class="link link-accent" href="/edit-game/{{selectedGame.id}}">here</a></div>
+                            </div>
+                        </span>
+                    }
+                </div>
+            </div>
+            <div class="divider"></div>
+            <div class="form-control mb-2">
+                <label class="label" for="autoCodeDistribution">
+                    <span>
+                        <p class="label-text text-xl text-[#ebe9ed]">2. Select type of key distribution you prefer</p>
+                        <p class="label-text text-sm text-[#ebe9ed] mb-2">KeiPai allows you to automate key distribution</p>
+                    </span>
+                </label>
+                <div class="flex justify-between">
+                    <div class="flex items-center">
+                        <input type="radio" id="autoCodeDistribution" name="autoCodeDistribution" [value]="true" formControlName="autoCodeDistribution" class="radio" />
+                        <label for="autoCodeDistribution" class="text-[#ebe9ed] ml-2 text-xl">Automatic</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="radio" id="codeDistribution" name="autoCodeDistribution" [value]="false" formControlName="autoCodeDistribution" class="radio" />
+                        <label for="autoCodeDistribution" class="text-[#ebe9ed] ml-2 text-xl">Manual</label>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-2">
+                    <div class="text-[#ebe9ed] text-sm">If user meets the criteria their request will be automatically accepted</div>
+                    <div class="text-[#ebe9ed] text-sm">Each request sent by the user will have to be considered manually</div>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <div class="form-control mb-2">
+                <label class="label" for="startDate">
+                    <span>
+                        <p class="label-text text-xl text-[#ebe9ed]">3. Set Starting and Ending Date</p>
+                        <p class="label-text text-sm text-[#ebe9ed] mb-2">Leave End Date empty if you don't know when you want campaign to end</p>
+                    </span>
+                </label>
+                <div class="flex justify-between">
+                    <div class="flex flex-col w-1/2">
+                        <label for="startDate" class="text-[#ebe9ed] text-lg mb-1">Start Date</label>
+                        <input type="date" id="startDate" formControlName="startDate" class="input input-bordered w-1/2 h-12 bg-[#353347] border-[#ebe9ed] rounded-lg focus:outline-none focus:ring-2"
+                        [ngClass]="{
+                            'input-error':
+                              addCampaignForm.get('startDate')?.hasError('required') &&
+                              addCampaignForm.get('startDate')?.touched,
+                            'input-success': addCampaignForm.get('startDate')?.valid
+                          }" />
+                        <label class="label">
+                        <span class="label-text-alt text-error">
+                            @if(addCampaignForm.get('startDate')?.hasError('required') &&
+                            addCampaignForm.get('startDate')?.touched) { Start Date is required.
+                            }
+                        </span>
+                        </label>
+                    </div>
+                    <div class="flex flex-col items-end w-1/2">
+                        <label for="endDate" class="text-[#ebe9ed] text-lg mb-1">End Date</label>
+                        <input type="date" id="endDate" formControlName="endDate" class="input input-bordered w-1/2 h-12 bg-[#353347] border-[#ebe9ed] rounded-lg focus:outline-none focus:ring-2"
+                        [ngClass]="{
+                            'input-error':
+                              addCampaignForm.get('endDate')?.hasError('endDateBeforeStartDate') &&
+                              addCampaignForm.get('endDate')?.touched,
+                            'input-success': addCampaignForm.get('endDate')?.valid
+                          }" />
+                        <label class="label">
+                          <span class="label-text-alt text-error">
+                            @if(addCampaignForm.get('endDate')?.hasError('endDateBeforeStartDate') &&
+                            addCampaignForm.get('endDate')?.touched) { End Date can't be before Start Date.
+                            }
+                          </span>
+                        </label>
+                    </div>
+                </div> 
+            </div>
+            <div class="divider"></div>
+            <div class="form-control mb-2">
+                <label class="label" for="campaignDescription">
+                    <div class="w-full">
+                        <span class="text-xl text-[#ebe9ed] w-full flex justify-between">
+                            <span>4. Describe your campaign</span>
+                            <span>{{ this.descLength }}/1000</span>
+                        </span>
+                    <p class="label-text text-sm text-[#ebe9ed] mb-2">If you have special instructons for the influencers that are not described in game description put them here</p>
+                    </div>
+                </label>
+                <div class="NgxEditor__Wrapper">
+                    <ngx-editor-menu [editor]="editor" [toolbar]="toolbar">
+                    </ngx-editor-menu>
+                    <ngx-editor [editor]="editor" formControlName="description" (ngModelChange)="onContentChange()"></ngx-editor>
+                </div>
+                <label class="label">
+                    <span class="label-text-alt text-error">
+                      @if(addCampaignForm.get('description')?.hasError('maxlength') &&
+                      addCampaignForm.get('description')?.touched) { Character limit reached.
+                      }
+                    </span>
+                </label>
+            </div>
+            <div class="divider"></div>
+            <div class="form-control mb-2">
+                <label class="label" for="campaignTags">
+                    <span>
+                        <p class="label-text text-xl text-[#ebe9ed]">5. Platform Requirements</p>
+                        <p class="label-text text-sm text-[#ebe9ed] mb-2">Set minimum requirements for each available platform</p>
+                    </span>
+                </label>
+                @if (selectedGame.youtubeTag) {
+                    <div class="flex items-center text-2xl text-red-400 mb-4">
+                        <ng-icon name="bootstrapYoutube" class="mr-2"></ng-icon>
+                        <div class="text-xl text-[#ebe9ed]">Youtube</div>
+                    </div>
+                
+                    <div class="flex items-center mb-4">
+                        <input type="checkbox" id="youtube-subs" class="checkbox mr-2" formControlName="isYoutubeSubsChecked"/>
+                        <label for="youtube-subs" class="text-[#ebe9ed] w-1/4 min-w-[150px] mr-2">Minimum Subscribers</label>
+                        <input type="number" id="minimumYoutubeSubscribers" formControlName="minimumYoutubeSubscribers" class="input input-bordered w-1/3 h-12 bg-[#353347] border-[#ebe9ed] rounded-lg focus:outline-none focus:ring-2 disabled:opacity-50"/>
+                    </div>
+                
+                    <div class="flex items-center mb-4">
+                        <input type="checkbox" id="youtube-views" class="checkbox mr-2" formControlName="isYoutubeViewsChecked"/>
+                        <label for="youtube-views" class="text-[#ebe9ed] w-1/4 min-w-[150px] mr-2">Minimum Average Views</label>
+                        <input type="number" id="minimumYoutubeAvgViews" formControlName="minimumYoutubeAvgViews" class="input input-bordered w-1/3 h-12 bg-[#353347] border-[#ebe9ed] rounded-lg focus:outline-none focus:ring-2 disabled:opacity-50"/>
+                    </div>
+                }
+                @if (selectedGame.twitchTagId && selectedGame.twitchTagName) {
+                    <div class="flex items-center text-2xl text-purple-400 my-4">
+                        <ng-icon name="bootstrapTwitch" class="mr-2"></ng-icon>
+                        <div class="text-xl text-[#ebe9ed]">Twitch</div>
+                    </div>
+                
+                    <div class="flex items-center mb-4">
+                        <input type="checkbox" id="twitch-subs" class="checkbox mr-2" formControlName="isTwitchFollowsChecked"/>
+                        <label for="twitch-subs" class="text-[#ebe9ed] w-1/4 min-w-[150px] mr-2">Minimum Followers</label>
+                        <input type="number" id="minimumTwitchFollowers" formControlName="minimumTwitchFollowers" class="input input-bordered w-1/3 h-12 bg-[#353347] border-[#ebe9ed] rounded-lg focus:outline-none focus:ring-2 disabled:opacity-50"/>
+                    </div>
+                
+                    <div class="flex items-center mb-4">
+                        <input type="checkbox" id="twitch-views" class="checkbox mr-2" formControlName="isTwitchViewsChecked"/>
+                        <label for="twitch-views" class="text-[#ebe9ed] w-1/4 min-w-[150px] mr-2">Minimum Average Viewers</label>
+                        <input type="number" id="minimumTwitchAvgViewers" formControlName="minimumTwitchAvgViewers" class="input input-bordered w-1/3 h-12 bg-[#353347] border-[#ebe9ed] rounded-lg focus:outline-none focus:ring-2 disabled:opacity-50"/>
+                    </div>
+                }
+                <div class="flex items-center text-2xl text-[#ebe9ed] mt-4">
+                    <ng-icon name="bootstrapNewspaper" class="mr-2"></ng-icon>
+                    <p class="text-xl">Other Platforms</p>
+                </div>
+                <p class="text-sm text-[#ebe9ed] mb-4">Remember that Other Platforms are not automatically scanned. When reviewing request remember to check what platform Influencer has added</p>
+            <span class="my-2 flex items-center">
+                <input type="radio" id="areThirdPartyWebsitesDisabled" name="areThirdPartyWebsitesAllowed" value=0 formControlName="areThirdPartyWebsitesAllowed" class="radio" />
+                <label for="areThirdPartyWebsitesDisabled" class="text-[#ebe9ed] ml-2">Disabled</label>
+            </span>
+            <span class="my-2 flex items-center"> 
+                <input type="radio" id="areThirdPartyWebsitesVerified" name="areThirdPartyWebsitesAllowed" value=2 formControlName="areThirdPartyWebsitesAllowed" class="radio" />
+                <label for="areThirdPartyWebsitesVerified" class="text-[#ebe9ed] ml-2">Enabled for verified Influencers only</label>
+            </span>
+            <span class="my-2 flex items-center"> 
+                <input type="radio" id="areThirdPartyWebsitesAll" name="areThirdPartyWebsitesAllowed" value=1 formControlName="areThirdPartyWebsitesAllowed" class="radio" />
+                <label for="areThirdPartyWebsitesAll" class="text-[#ebe9ed] ml-2">Enabled for all Influencers</label>
+            </span>
+            </div>
+            <div class="divider"></div>
+            <div class="form-control mb-2">
+                <label class="label" for="embargoDate">
+                    <span>
+                        <p class="label-text text-xl text-[#ebe9ed]">6. Additional Settings</p>
+                        <p class="label-text text-sm text-[#ebe9ed] mb-2">Add some final touches to your campaign</p>
+                    </span>
+                </label>
+                <div class="flex flex-col w-1/2">
+                    <label for="embargoDate" class="text-[#ebe9ed] text-lg">Embargo Date</label>
+                    <label for="embargoDate" class="label-text text-sm text-[#ebe9ed] mb-1">If Influencer breaks embargo feel free to report them</label>
+                    <input type="date" id="embargoDate" formControlName="embargoDate" class="input input-bordered w-1/2 h-12 bg-[#353347] border-[#ebe9ed] rounded-lg focus:outline-none focus:ring-2" />
+                </div>
+            </div>
+            <div class="divider"></div>
+            <div class="form-control mb-2">
+                <label class="label" for="keys">
+                    <span>
+                        <p class="label-text text-xl text-[#ebe9ed]">7. Assign Keys for your campaign</p>
+                        <p class="label-text text-sm text-[#ebe9ed] mb-2">Influencer will be able to pick desired platform as long as the are available keys and key limit was not reached</p>
+                    </span>
+                </label>
+                <app-assign-keys id="keys" [keys]="selectedGame.keysPerPlatform" formControlName="keys"></app-assign-keys>
+                <label class="label">
+                    <span class="label-text-alt text-error">
+                      @if(addCampaignForm.get('keys')?.hasError('required') &&
+                      addCampaignForm.get('keys')?.touched) { Character limit reached.
+                      }
+                    </span>
+                </label>
+            </div>
+            <button type="submit"
+                class="bg-blue-500 rounded-full p-4 shadow w-full text-xl font-medium text-white hover:bg-blue-700 disabled:bg-gray-600 disabled:text-black disabled:opacity-65 disabled:cursor-not-allowed"
+                [disabled]="addCampaignForm.invalid">
+                Start Campaign
+            </button>
+            }
+        </form>
+    </div>
+</div>

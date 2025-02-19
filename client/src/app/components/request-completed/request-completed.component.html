@@ -1,0 +1,46 @@
+<button class="card bg-[#353347] w-[900px] h-[70px] m-2 flex flex-row items-center justify-between cursor-default">
+    <button (click)="redirector(this.request.gameId, '/game/')">
+        @if (request.gameCover !== "") {
+        <img
+        src="{{request.gameCover}}"
+        lazyload
+        class="rounded-lg w-auto h-[50px] ml-5" />
+        }
+        @if (request.gameCover === "") {
+        <div class="w-auto h-[50px] rounded-lg ml-5 text-center content-center bg-black">no game cover set</div>
+        }
+    </button>
+    <div class="divider lg:divider-horizontal before:bg-[#23222f] after:bg-[#23222f]"></div>
+    <div class="cursor-pointer" (click)="redirector(this.request.campaignId, '/campaign/')">
+        <h1>Campaign ID</h1>
+        <h1 class="text-[#ebe9ed] text-ellipsis overflow-hidden whitespace-nowrap">{{request.campaignId}}</h1>
+    </div>
+    <div class="divider lg:divider-horizontal before:bg-[#23222f] after:bg-[#23222f]"></div>
+    <div class="w-[120px] cursor-pointer" (click)="redirector(this.request.gameId, '/game/')">
+        <h1>Game</h1>
+        <h1 class="text-[#ebe9ed] text-ellipsis overflow-hidden whitespace-nowrap">{{request.gameName}}</h1>
+    </div>
+    <div class="divider lg:divider-horizontal before:bg-[#23222f] after:bg-[#23222f]"></div>
+    <div>
+        <h1>Platform</h1>
+        <h1 class="text-[#ebe9ed]  text-ellipsis overflow-hidden whitespace-nowrap"><ng-icon name="{{request.platform | platformIcon}}"></ng-icon></h1>
+    </div>
+    <div class="divider lg:divider-horizontal before:bg-[#23222f] after:bg-[#23222f]"></div>
+    <div>
+        <h1>Media</h1>
+        <h1 class="text-[#ebe9ed] text-ellipsis overflow-hidden whitespace-nowrap"><ng-icon name="{{request.media | mediaIcon}}"></ng-icon></h1>
+    </div>
+    <div class="divider lg:divider-horizontal before:bg-[#23222f] after:bg-[#23222f]"></div>
+    <div class="text-center mr-6">
+        <h1>Delivered Content</h1>
+        @if(request.content){
+            <button class="btn btn-sm btn-outline btn-success px-5" (click)="this.openMediaView(); $event.stopPropagation()">Check Content</button>
+        }
+        @else{
+            <div class="tooltip" data-tip="This media was deleted or we weren't been able to find it">
+                <button class="btn btn-sm btn-outline btn-error px-5" [disabled]="true">Check Content</button>
+            </div>
+        }
+    </div>
+</button>
+

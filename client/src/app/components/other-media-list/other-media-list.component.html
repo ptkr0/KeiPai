@@ -1,0 +1,8 @@
+<div class="flex flex-col mx-auto align-middle justify-center my-2 max-w-6xl">
+    <div class="flex flex-col items-center">
+        @for(content of contents; track content)
+        {
+            <app-other-media class="w-full" [content]="content"></app-other-media>
+        }
+    </div>
+</div>

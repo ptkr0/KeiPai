@@ -1,0 +1,19 @@
+<input
+  type="text"
+  class="input input-bordered bg-[#353347] border-[#ebe9ed] w-1/2"
+  placeholder="Start typing to search..."
+  [formControl]="searchControl"
+  (focus)="showDropdown = true"
+  (blur)="onBlur()"
+/>
+@if (showDropdown && games.length > 0) {
+<ul
+  class="menu bg-[#353347] border-[#ebe9ed] w-1/2 absolute z-10 shadow-lg max-h-60 overflow-auto"
+>
+  @for (game of games; track game) {
+  <li (mousedown)="selectGame(game)" class="cursor-pointer">
+    <a>{{ game.name }}</a>
+  </li>
+  }
+</ul>
+}
