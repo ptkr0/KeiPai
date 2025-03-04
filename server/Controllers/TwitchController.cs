@@ -41,6 +41,9 @@ namespace Controllers
 			var channelInfo = await _twitchService.GetChannelInfo(response.AccessToken);
 			if (channelInfo == null) return BadRequest("Failed to get channel info");
 
+			var existingTwitchAccount = await _twitchRepo.GetTwitchAccountByChannelId(channelInfo.ChannelId);
+			if (existingTwitchAccount != null) return BadRequest("Twitch account already connected");
+
 			var webhooks = await _twitchService.SubscribeToWebhooks(channelInfo.ChannelId);
 			if (webhooks == false) return BadRequest("Failed to subscribe to webhooks");
 

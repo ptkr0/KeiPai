@@ -36,9 +36,11 @@ export class TwitchSuccessComponent {
         }).subscribe({
           next: (response: any) => {
             console.log('Tokens received:', response);
+            this.toast.success('Twitch Connected Successfully');
           },
           error: (error: any) => {
             console.error('Error exchanging code for tokens:', error);
+            this.toast.error('Error connecting Twitch');
           }
         });
       } else {
@@ -46,7 +48,6 @@ export class TwitchSuccessComponent {
       }
       
       this.router.navigateByUrl('/campaigns');
-      this.toast.success('Twitch Connected Successfully');
     }
   }
 }

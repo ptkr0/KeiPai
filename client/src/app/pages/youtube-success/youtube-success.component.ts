@@ -37,9 +37,11 @@ export class YoutubeSuccessComponent implements OnInit {
         }).subscribe({
           next: (response: any) => {
             console.log('Tokens received:', response);
+            this.toast.success('YouTube Connected Successfully');
           },
           error: (error: any) => {
             console.error('Error exchanging code for tokens:', error);
+            this.toast.error('Error connecting YouTube');
           }
         });
       } else {
@@ -47,7 +49,6 @@ export class YoutubeSuccessComponent implements OnInit {
       }
       
       this.router.navigateByUrl('/campaigns');
-      this.toast.success('YouTube Connected Successfully');
     }
   }
 }

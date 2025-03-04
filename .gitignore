@@ -29,7 +29,7 @@ yarn-error.log
 .history/*
 
 # Miscellaneous
-/.angular/cache
+*/.angular/cache
 .sass-cache/
 /connect.lock
 /coverage
@@ -327,6 +327,9 @@ FakesAssemblies/
 # Node.js Tools for Visual Studio
 .ntvs_analysis.dat
 node_modules/
+
+# Angular cache
+/.angular/cache
 
 # Visual Studio 6 build log
 *.plg

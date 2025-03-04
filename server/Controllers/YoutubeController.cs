@@ -47,7 +47,7 @@ namespace Controllers
 			var channelInfo = await _youtubeService.GetChannelInfo(response.AccessToken);
 			if (channelInfo == null) return BadRequest("Failed to get channel info");
 
-			//if (await _youtubeRepo.GetYoutubeAccountByChannelId(channelInfo.ChannelId) != null) return BadRequest("Youtube account already connected");
+			if (await _youtubeRepo.GetYoutubeAccountByChannelId(channelInfo.ChannelId) != null) return BadRequest("Youtube account already connected");
 
 			youtubeAccount = new YoutubeAccount
 			{
