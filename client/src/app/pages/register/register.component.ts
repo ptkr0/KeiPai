@@ -46,7 +46,7 @@ constructor(private fb: FormBuilder) {
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(32), Validators.pattern(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/)]],
     confirmPassword: ['', [Validators.required]],
-    siteUrl: [null, [Validators.pattern(/^(https?:\/\/)?(www\.)?[a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/)]],
+    websiteUrl: ['', [Validators.pattern(/^(https?:\/\/)?(www\.)?[a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/)]],
     contactEmail: [null, [Validators.email]],
   }, { 
     validators: this.passwordMatchValidator 
@@ -91,8 +91,8 @@ onSubmitInfluencer(): void {
 
 onSubmitDeveloper(): void {
   if (this.registerFormDeveloper.valid) {
-    const { name, email, password, siteUrl, contactEmail } = this.registerFormDeveloper.value;
-    this.userService.registerDeveloper({ username: name, email, password, siteUrl, contactEmail }).subscribe({
+    const { name, email, password, websiteUrl, contactEmail } = this.registerFormDeveloper.value;
+    this.userService.registerDeveloper({ username: name, email, password, websiteUrl, contactEmail }).subscribe({
       next: (user) => {
         this.toast.success('User registered successfully');
         this.userService.currentUserSig.set(user);

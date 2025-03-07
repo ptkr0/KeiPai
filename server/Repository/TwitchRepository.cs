@@ -127,7 +127,7 @@ namespace Repository
 		{
 			var twelveHours = DateTimeOffset.Now.AddHours(-12);
 
-			return await _context.TwitchAccounts.Where(ta => ta.RefreshToken != null && (ta.LastCrawlDate == null || ta.LastCrawlDate <= twelveHours)).ToListAsync();
+			return await _context.TwitchAccounts.Where(ta => !string.IsNullOrEmpty(ta.RefreshToken) && (ta.LastCrawlDate == null || ta.LastCrawlDate <= twelveHours)).ToListAsync();
 		}
 
 		public async Task<Content> StartStream(Content twitchStream)

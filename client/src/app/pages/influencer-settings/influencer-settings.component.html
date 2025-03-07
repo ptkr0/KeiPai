@@ -121,7 +121,7 @@
             }
         </h2>
         @if (this.connectedMedia?.youtube) {
-            <span>Connected Account: <a href="{{this.connectedMedia?.youtube?.url}}" target="_blank" class="link link-accent">{{this.connectedMedia?.youtube?.username}}</a><div class="tooltip" data-tip="Click to refresh Youtube data. You can manually refresh Youtube account every hour"><button class="btn btn-xs btn-circle ml-2 bg-[#23222f]" [disabled]="!canRefresh()" (click)="onRefreshYoutube()"><ng-icon name="ionRefreshSharp"></ng-icon></button></div>
+            <span>Connected Account: <a href="{{this.connectedMedia?.youtube?.url}}" target="_blank" class="link link-accent">{{this.connectedMedia?.youtube?.username}}</a><div class="tooltip" data-tip="Click to refresh Youtube data. You can manually refresh Youtube account every hour"><button class="btn btn-xs btn-circle ml-2 bg-[#23222f]" [disabled]="canRefresh()" (click)="onRefreshYoutube()"><ng-icon name="ionRefreshSharp"></ng-icon></button></div>
             <div class="text-xs">Last Refresh: {{this.connectedMedia?.youtube?.lastCrawlDate | date:'short'}}</div></span>
             <div class="text-center my-4">
                 <div class="stats shadow bg-[#2c2a3a] text-[#ebe9ed]">

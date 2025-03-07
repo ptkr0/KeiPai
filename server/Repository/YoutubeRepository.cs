@@ -245,9 +245,11 @@ namespace Repository
 		public async Task<List<YoutubeAccount>> GetAllYoutubeAccounts()
 		{
 			// to prevent from crawling the same account multiple times, we only crawl accounts that have not been crawled in the last 2 hours
-			var twoHours = DateTimeOffset.Now.AddHours(-2);
+			var twoHours = DateTime.Now.AddHours(-2);
 
-			return await _context.YoutubeAccounts.Where(ya => ya.RefreshToken != null && (ya.LastCrawlDate == null || ya.LastCrawlDate <= twoHours)).ToListAsync();
+			return await _context.YoutubeAccounts
+				.Where(ya => !string.IsNullOrEmpty(ya.RefreshToken) && (ya.LastCrawlDate <= twoHours || ya.LastCrawlDate == null))
+				.ToListAsync();
 		}
 
 		/// <summary>

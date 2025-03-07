@@ -55,6 +55,12 @@ export class RequestAcceptedComponent {
         submit_youtube.showModal();
       }
     }
+    else if (this.request.media === 'twitch') {
+      const submit_twitch = document.getElementById('submit_twitch') as HTMLDialogElement;
+      if (submit_twitch) {
+        submit_twitch.showModal();
+      }
+    }
     else if(this.request.media === 'other')
     {
       let game: IBasicGame = { id: this.request.gameId, name: this.request.gameName, cover: this.request.gameCover };

@@ -287,7 +287,7 @@
             </div>
       
             <div class="form-control mb-2">
-                <label class="label" for="siteUrl">
+                <label class="label" for="websiteUrl">
                   <span class="label-text text-[#ebe9ed]"
                     >URL to your website</span
                   >
@@ -296,13 +296,13 @@
                   type="text"
                   id="contactEmail"
                   placeholder="Link to your website"
-                  formControlName="siteUrl"
+                  formControlName="websiteUrl"
                   class="input input-bordered w-full bg-[#353347] border-[#ebe9ed]"
                 />
                 <label class="label">
                     <span class="label-text-alt text-error">
-                      @if (registerFormDeveloper.get('siteUrl')?.hasError('validUrl') &&
-                      registerFormDeveloper.get('siteUrl')?.touched) { Must be a valid URL. }
+                      @if (registerFormDeveloper.get('websiteUrl')?.hasError('validUrl') &&
+                      registerFormDeveloper.get('websiteUrl')?.touched) { Must be a valid URL. }
                     </span>
                   </label>
               </div>

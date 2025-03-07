@@ -22,6 +22,6 @@ export interface IRegisterDeveloper {
     username: string;
     email: string;
     password: string;
-    siteUrl: string;
+    websiteUrl: string;
     contactEmail: string;
 }
