@@ -161,7 +161,7 @@ cd <KeiPai/server>
 dotnet restore
 ```
 
-* (Alternatively) Open solution file (.sln) in Visual Studio 2022
+* (Alternatively) Open solution file (`.sln`) in Visual Studio 2022
 * Restore the NuGet packages by right-clicking on the solution in the Solution Explorer and selecting "Restore NuGet Packages"
 
 **4. Set up the database**
@@ -332,3 +332,9 @@ ngrok http --url=<generated-domain> <https://localhost:7157>
 | ![](./assets/private-messages.png)|
 |:--:| 
 | *Private messages* |
+
+## Made by
+
+Piotr Radziszewski  
+
+*MyPHPoL™ 2024-2025*

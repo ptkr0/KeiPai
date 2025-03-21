@@ -1,4 +1,3 @@
-// file-validator.ts
 import { AbstractControl, ValidatorFn } from '@angular/forms';
 
 export function fileValidator(): ValidatorFn {
