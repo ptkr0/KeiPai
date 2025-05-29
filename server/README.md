@@ -6,7 +6,6 @@
 
 ```
 ├───Background Services
-├───bin
 ├───Controllers
 ├───Data
 ├───Dtos
@@ -26,7 +25,6 @@
 ├───Interfaces
 ├───Migrations
 ├───Models
-├───obj
 ├───Properties
 ├───Repository
 └───Services
